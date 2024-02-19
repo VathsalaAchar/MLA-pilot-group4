@@ -4,13 +4,18 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "analytics/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "analytics/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo The PR was merged
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -31,6 +36,5 @@ jobs:
           ECR_REPOSITORY: mla-fitnessapp-analytics
           IMAGE_TAG: latest
         run: |
-          cd analytics
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
