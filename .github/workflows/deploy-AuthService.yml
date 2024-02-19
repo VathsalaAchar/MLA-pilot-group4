@@ -1,4 +1,4 @@
-name: Deploy Auth-Service to AWS ECR
+name: Build and Deploy Auth Service to AWS ECR
 
 on:
   push:
