@@ -18,10 +18,16 @@ const TrackExercise = ({ currentUser }) => {
     duration: 0,
     date: new Date(),
   });
-  const [message, setMessage] = useState(''); 
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(''); 
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    if (state.date > new Date()) {
+      setError('Selected date cannot be in the future.');
+      return;
+    }
 
     const dataToSubmit = {
       username: currentUser,
@@ -100,6 +106,7 @@ const TrackExercise = ({ currentUser }) => {
           Save activity
         </Button>
       </Form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {message && <p style={{color: 'green'}}>{message}</p>}
     </div>
   );
