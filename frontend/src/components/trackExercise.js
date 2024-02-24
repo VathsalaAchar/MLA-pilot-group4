@@ -29,6 +29,11 @@ const TrackExercise = ({ currentUser }) => {
       return;
     }
 
+    if (state.duration <=0 ) {
+      setError('Please enter valid duration');
+      return;
+    }
+
     const dataToSubmit = {
       username: currentUser,
       ...state,
@@ -47,9 +52,11 @@ const TrackExercise = ({ currentUser }) => {
 
       setMessage('Activity logged successfully! Well done!');
       setTimeout(() => setMessage(''), 2000);
+      setError('');
       
     } catch (error) {
       console.error('There was an error logging your activity!', error);
+      setError('Failed to log activity. Please try again.');
     }
   };
 
@@ -67,19 +74,19 @@ const TrackExercise = ({ currentUser }) => {
           />
         </Form.Group>
         <div style={{ marginBottom: '20px' }}>
-          <IconButton color={state.exerciseType === 'Running' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Running' })}>
+          <IconButton color={state.exerciseType === 'Running' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Running' })} title="Running">
             <DirectionsRunIcon fontSize="large" />
           </IconButton>
-          <IconButton color={state.exerciseType === 'Cycling' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Cycling' })}>
+          <IconButton color={state.exerciseType === 'Cycling' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Cycling' })} title="Cycling">
             <BikeIcon fontSize="large" />
           </IconButton>
-          <IconButton color={state.exerciseType === 'Swimming' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Swimming' })}>
+          <IconButton color={state.exerciseType === 'Swimming' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Swimming' })} title="Swimming">
             <PoolIcon fontSize="large" />
           </IconButton>
-          <IconButton color={state.exerciseType === 'Gym' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Gym' })}>
+          <IconButton color={state.exerciseType === 'Gym' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Gym' })} title="Gym">
             <FitnessCenterIcon fontSize="large" />
           </IconButton>
-          <IconButton color={state.exerciseType === 'Other' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Other' })}>
+          <IconButton color={state.exerciseType === 'Other' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Other' })} title="Other">
             <OtherIcon fontSize="large" /> 
           </IconButton>
         </div>
