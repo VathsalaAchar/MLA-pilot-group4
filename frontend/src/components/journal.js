@@ -39,15 +39,18 @@ const Journal = ({ currentUser }) => {
     setEndDate(moment(endDate).add(1, 'weeks').endOf('week').toDate());
   };
 
+  // Check if endDate is the end of the current week
+  const isCurrentWeek = moment().startOf('week').isSame(moment(startDate), 'week');
+
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
       <br></br>
       <div className="date-range">
         <Button className="button-small" onClick={goToPreviousWeek}>&larr; Previous</Button>
-        <span>{moment(startDate).format('YYYY-MM-DD')} to {moment(endDate).format('YYYY-MM-DD')}</span>
-        <Button className="button-small" onClick={goToNextWeek}>Next &rarr;</Button>
-        </div>
+        <span>{moment(startDate).format('MMM DD, YYYY')} - {moment(endDate).format('MMM DD, YYYY')}</span>
+        {!isCurrentWeek && <Button className="button-small" onClick={goToNextWeek}>Next &rarr;</Button>}
+      </div>
       <ul>
         {exercises && exercises.length > 0 ? (
           exercises.map((exercise, index) => (
