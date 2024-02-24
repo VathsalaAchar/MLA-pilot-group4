@@ -1,6 +1,7 @@
 ## Authentication service
 
 This is the Authentication microservice for the MLA Fitness tracker app.
+
 ### Prerequisites
 
 - Java 8
@@ -36,7 +37,7 @@ db.users.find()
 
 ### Running Cucumber tests
 
-```
+```sh
 cd authservice 
 
 # check if node and npm are installed
