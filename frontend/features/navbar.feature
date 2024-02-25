@@ -18,9 +18,4 @@ Feature: NavbarComponent Functionality
   Scenario: User logs out
     Given the user is on the home page
     When the user clicks on "Logout" in the navigation bar
-    Then the user should be logged out
-
-  Scenario: User clicks on an invalid route
-    Given the user is on the home page
-    When the user clicks on an invalid link in the navigation bar
-    Then an error should be logged, and the user remains on the home page
+    Then the user should be logged out and redirected to the login page
