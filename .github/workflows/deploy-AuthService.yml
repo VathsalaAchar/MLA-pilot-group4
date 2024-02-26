@@ -1,16 +1,21 @@
-name: Deploy Auth-Service to AWS ECR
+name: Build and Deploy Auth Service to AWS ECR
 
 on:
   push:
     branches:
       - main
+    paths:
+      - "authservice/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "authservice/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo The PR was merged
       - name: Checkout code
         uses: actions/checkout@v2
 

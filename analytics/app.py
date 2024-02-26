@@ -113,9 +113,11 @@ def weekly_user_stats():
     date_format = "%Y-%m-%d"
     try:
         start_date = datetime.strptime(start_date_str, date_format)
-        end_date = datetime.strptime(end_date_str, date_format) + timedelta(days=1)  # Include the whole end day
+        # Include the whole end day
+        end_date = datetime.strptime(end_date_str, date_format) + timedelta(days=1)
 
-        logging.info(f"Fetching weekly stats for user: {username} from {start_date} to {end_date}")
+        logging.info(
+            f"Fetching weekly stats for user: {username} from {start_date} to {end_date}")
     except Exception as e:
         logging.error(f"Error parsing dates: {e}")
         return jsonify(error="Invalid date format"), 400
@@ -151,10 +153,9 @@ def weekly_user_stats():
         stats = list(db.exercises.aggregate(pipeline))
         return jsonify(stats=stats)
     except Exception as e:
-        current_app.logger.error(f"An error occurred while querying MongoDB: {e}")
+        app.logger.error(f"An error occurred while querying MongoDB: {e}")
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
-
 
 
 if __name__ == "__main__":

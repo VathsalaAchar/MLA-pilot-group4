@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post(`${config.apiUrl}/auth/login`, {
         username,
         password,
       });
@@ -25,7 +26,7 @@ const Login = ({ onLogin }) => {
     } catch (err) {
       setError('Failed to login');
     }
-};
+  };
 
   return (
     <div className="login-container">
@@ -61,8 +62,8 @@ const Login = ({ onLogin }) => {
       </Form>
 
       <p className="mt-3">
-    Don't have an account? <Link to="/signup">Sign up</Link>
-</p>
+        Don't have an account? <Link to="/signup">Sign up</Link>
+      </p>
     </div>
   );
 };

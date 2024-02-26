@@ -30,8 +30,10 @@ function App() {
     <div className="App">
       <Router>
         <div className="appTitle">
-          <h1>MLA Fitness App</h1>
-          <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
+          <header>
+            <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
+            <h1>MLA Fitness App</h1>
+          </header>
         </div>
 
         {isLoggedIn && <NavbarComponent onLogout={handleLogout} />}
