@@ -11,6 +11,16 @@ const Login = ({ onLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (!username.trim() && !password.trim()) {
+      setError('Please enter both username and password');
+      return;
+    } else if (!username.trim()) {
+      setError('Please enter username');
+      return;
+    } else if (!password.trim()) {
+      setError('Please enter password');
+    } else {
+    
     try {
       const response = await axios.post('http://localhost:8080/api/auth/login', {
         username,
@@ -25,6 +35,7 @@ const Login = ({ onLogin }) => {
     } catch (err) {
       setError('Failed to login');
     }
+  }
 };
 
   return (
