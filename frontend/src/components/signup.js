@@ -13,10 +13,23 @@ const Signup = ({ onSignup }) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  //function to check if the password meets the criteria or not
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+    return regex.test(password);
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+
+    const { username, password } = formData;
+
+    //If password doesn't meet the criteria it shows the error message
+    if (!isPasswordValid(password)) {
+      setError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+      return;
+    }
 
     try {
         const response = await axios.post(`${config.apiUrl}/auth/signup`, formData);
