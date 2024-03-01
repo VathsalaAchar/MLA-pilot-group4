@@ -1,15 +1,9 @@
 from core import app
 from core.models import db
-from dotenv import load_dotenv
 from flask import jsonify, request
-from pymongo import MongoClient
-from flask_pymongo import PyMongo
-from flask_cors import CORS
-from urllib.parse import quote_plus
 from bson import json_util
 import traceback
 import logging
-import os
 from datetime import datetime, timedelta
 
 
