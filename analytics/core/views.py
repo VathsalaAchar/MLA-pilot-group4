@@ -1,25 +1,10 @@
-from dotenv import load_dotenv
-from flask import Flask, render_template, jsonify, request
-from pymongo import MongoClient
-from flask_pymongo import PyMongo
-from flask_cors import CORS
-from urllib.parse import quote_plus
+from core import app
+from core.models import db
+from flask import jsonify, request
 from bson import json_util
 import traceback
 import logging
-import os
 from datetime import datetime, timedelta
-
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}},
-     methods="GET,HEAD,POST,OPTIONS,PUT,PATCH,DELETE")
-
-load_dotenv()
-mongo_uri = os.getenv('MONGO_URI')
-mongo_db = os.getenv('MONGO_DB')
-
-client = MongoClient(mongo_uri)
-db = client[mongo_db]
 
 
 @app.route('/')
@@ -114,7 +99,8 @@ def weekly_user_stats():
     try:
         start_date = datetime.strptime(start_date_str, date_format)
         # Include the whole end day
-        end_date = datetime.strptime(end_date_str, date_format) + timedelta(days=1)
+        end_date = datetime.strptime(
+            end_date_str, date_format) + timedelta(days=1)
 
         logging.info(
             f"Fetching weekly stats for user: {username} from {start_date} to {end_date}")
@@ -156,7 +142,3 @@ def weekly_user_stats():
         app.logger.error(f"An error occurred while querying MongoDB: {e}")
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
-
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5050)
