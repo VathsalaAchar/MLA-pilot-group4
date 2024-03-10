@@ -15,6 +15,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: cfgmla23
+        options: >-
+          --health-cmd "echo 'db.runCommand("ping").ok' | mongosh --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name mongo_container
+        ports:
+          - 27017:27017   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,7 +56,7 @@ jobs:
       - name: Run pytest
         run: |
           pytest
-
+  
       # Build image and push to ECR
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
