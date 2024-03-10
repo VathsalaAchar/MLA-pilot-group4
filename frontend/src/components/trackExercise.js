@@ -33,6 +33,11 @@ const TrackExercise = ({ currentUser }) => {
       setError('Please enter valid duration');
       return;
     }
+    
+    if (!state.exerciseType) {
+      setError('Please select an exercise type');
+      return;
+    }
 
     const dataToSubmit = {
       username: currentUser,
