@@ -55,6 +55,7 @@ jobs:
 
       - name: Run pytest
         run: |
+          cd analytics
           pytest
   
       # Build image and push to ECR
