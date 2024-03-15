@@ -1,10 +1,14 @@
+from core.gql_schema import schema
 from core import app
-from core.models import db
+from core.models import stats_aggregate_by_exercise_type, db
 from flask import jsonify, request
 from bson import json_util
 import traceback
 import logging
 from datetime import datetime, timedelta
+
+from ariadne.explorer import ExplorerGraphiQL
+from ariadne import graphql_sync
 
 
 @app.route('/')
@@ -16,37 +20,7 @@ def index():
 
 @app.route('/stats')
 def stats():
-    pipeline = [
-        {
-            "$group": {
-                "_id": {
-                    "username": "$username",
-                    "exerciseType": "$exerciseType"
-                },
-                "totalDuration": {"$sum": "$duration"}
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id.username",
-                "exercises": {
-                    "$push": {
-                        "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration"
-                    }
-                }
-            }
-        },
-        {
-            "$project": {
-                "username": "$_id",
-                "exercises": 1,
-                "_id": 0
-            }
-        }
-    ]
-
-    stats = list(db.exercises.aggregate(pipeline))
+    stats = stats_aggregate_by_exercise_type()
     return jsonify(stats=stats)
 
 
@@ -142,3 +116,21 @@ def weekly_user_stats():
         app.logger.error(f"An error occurred while querying MongoDB: {e}")
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
+
+
+explorer_html = ExplorerGraphiQL().html(None)
+
+
+@app.route('/stats/graphql', methods=["GET"])
+def graphql_explorer():
+    return explorer_html, 200
+
+
+@app.route("/stats/graphql", methods=["POST"])
+def graphql_server():
+    data = request.get_json()
+    success, result = graphql_sync(
+        schema, data, context_value={"request": request}, debug=app.debug
+    )
+    status_code = 200 if success else 400
+    return jsonify(result), status_code
