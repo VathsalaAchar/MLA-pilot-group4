@@ -16,7 +16,7 @@ const iconMap = {
     Other: { icon: FaPersonCircleQuestion, color: '#F25757' } // Changed icon to FaUserCircle
 };
 
-const Journal = ({ currentUser }) => {
+const Journal = ({ currentUser, weeklyGoal=120 }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week').toDate());
   const [endDate, setEndDate] = useState(moment().endOf('week').toDate());
   const [exercises, setExercises] = useState([]);
