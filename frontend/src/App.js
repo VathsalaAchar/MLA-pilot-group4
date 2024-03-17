@@ -1,5 +1,5 @@
 import "@mantine/core/styles.css";
-import { MantineProvider, createTheme } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import React from 'react';
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -7,8 +7,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavbarComponent from './components/navbar';
 import TrackExercise from './components/trackExercise';
-import NewStatistics from './components/new_statistics'
-import JournalNew from './components/new_journal'
 import Statistics from './components/statistics';
 import Footer from './components/footer';
 import Login from './components/login';
