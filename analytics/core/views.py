@@ -1,3 +1,4 @@
+from flask import current_app as app
 from core.gql_schema import schema
 from core.models import mongo
 from flask import Blueprint
@@ -145,7 +146,7 @@ def weekly_user_stats():
         stats = list(mongo.db.exercises.aggregate(pipeline))
         return jsonify(stats=stats)
     except Exception as e:
-        stats_page.logger.error(
+        app.logger.error(
             f"An error occurred while querying MongoDB: {e}")
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
@@ -163,7 +164,7 @@ def graphql_explorer():
 def graphql_server():
     data = request.get_json()
     success, result = graphql_sync(
-        schema, data, context_value={"request": request}, debug=stats_page.debug
+        schema, data, context_value={"request": request}, debug=app.debug
     )
     status_code = 200 if success else 400
     return jsonify(result), status_code

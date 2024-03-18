@@ -1,6 +1,4 @@
-from bson import json_util
 from ariadne import gql, make_executable_schema, QueryType
-from flask import jsonify
 from core.models import mongo
 
 
