@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Grid, Card, RingProgress, Text, Center } from '@mantine/core';
+import { BiRun, BiCycling, BiDumbbell, BiSwim } from 'react-icons/bi'; // Import icons for exercise types
+import { FaPersonCircleQuestion } from "react-icons/fa6";
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
+import axios from 'axios';
 import './journal.css';
 import config from '../config';
 
-const Journal = ({ currentUser }) => {
+const iconMap = {
+    Running: { icon: BiRun, color: '#322142' },
+    Cycling: { icon: BiCycling, color: '#03A6A6' },
+    Gym: { icon: BiDumbbell, color: '#00563E' },
+    Swimming: { icon: BiSwim, color: '#CE466B' },
+    Other: { icon: FaPersonCircleQuestion, color: '#F25757' } // Changed icon to FaUserCircle
+};
+
+const Journal = ({ currentUser, weeklyGoal=120 }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week').toDate());
   const [endDate, setEndDate] = useState(moment().endOf('week').toDate());
   const [exercises, setExercises] = useState([]);
@@ -52,17 +63,40 @@ const Journal = ({ currentUser }) => {
         <span>{moment(startDate).format('MMM DD, YYYY')} - {moment(endDate).format('MMM DD, YYYY')}</span>
         {!isCurrentWeek && <Button className="button-small" onClick={goToNextWeek}>Next &rarr;</Button>}
       </div>
-      <ul>
-        {exercises && exercises.length > 0 ? (
-          exercises.map((exercise, index) => (
-            <li key={index} className="exercise-journal-data">
-              {exercise.exerciseType} - {exercise.totalDuration} minutes
-            </li>
-          ))
-        ) : (
-          <li>No exercises found for this period.</li>
-        )}
-      </ul>
+      <div className="weekly-target" style={{ margin: '20px 0', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+        <Text style={{ fontSize: '18px', fontWeight: 'bold' }}>Weekly Target: {weeklyGoal} minutes</Text>
+      </div>
+      <Grid gutter="md" justify="center">
+        {exercises.map((exercise, index) => {
+          const { icon: Icon, color } = iconMap[exercise.exerciseType];
+          const progress = (exercise.totalDuration / weeklyGoal) * 100; // Assuming weekly goal is 120 minutes
+          return (
+            <Grid.Col key={index} span={{ xs: 12, sm: 6, md: 4 }}>
+              <Card shadow="xs" className="mantine-card">
+                <div style={{ position: 'relative', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <RingProgress
+                    size={80}
+                    roundCaps
+                    thickness={8}
+                    sections={[{ value: progress, color }]}
+                  />
+                  <Center style={{ position: 'absolute' }}>
+                    <Icon size={20} style={{ zIndex: 1 }} />
+                  </Center>
+                </div>
+                <div style={{ textAlign: 'center', marginTop: 10 }}>
+                  <Text className="exercise-type" c="dimmed" size="xs" tt="uppercase" fw={700}>
+                    {exercise.exerciseType}
+                  </Text>
+                  <Text className="exercise-time" fw={700} size="xl">
+                    {exercise.totalDuration} min
+                  </Text>
+                </div>
+              </Card>
+            </Grid.Col>
+          );
+        })}
+      </Grid>
     </div>
   );
 };
