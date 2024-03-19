@@ -11,7 +11,6 @@ import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import OtherIcon from '@material-ui/icons/HelpOutline';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 
 
 const TrackExercise = ({ currentUser }) => {

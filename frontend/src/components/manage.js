@@ -33,13 +33,11 @@ const Manage = ({ currentUser }) => {
   const deleteExercise = (id) => {
     axios.delete(`${config.apiUrl}/exercises/${id}`).then((response) => {
       getExercises();
-      console.log(response.data.message)
     });
   };
 
-  const updateExercise = (id) => {
+  const editExercise = (id) => {
     axios.get(`${config.apiUrl}/exercises/${id}`).then((response) => {
-      console.log("update data", response.data)
       navigate(`/trackExercise/`, {
         state: response.data
       });
@@ -61,7 +59,7 @@ const Manage = ({ currentUser }) => {
                 <div>{exercise.duration} mins</div>
               </div>
               <div>
-                <button className='btn' onClick={() => updateExercise(exercise._id)}>
+                <button className='btn' onClick={() => editExercise(exercise._id)}>
                   Edit
                 </button>
                 <button className='btn' onClick={() => deleteExercise(exercise._id)}>

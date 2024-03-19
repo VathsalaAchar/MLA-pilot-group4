@@ -5,7 +5,6 @@ const Exercise = require('../models/exercise.model');
 
 // GET: Retrieve all exercises
 router.get('/', async (req, res) => {
-  console.log(req.params)
   try {
     const exercises = await Exercise.find().sort({ date: 'desc' });
     res.json(exercises);
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
 
 // GET: Retrieve all exercises for a user
 router.get('/user/:username', async (req, res) => {
-  console.log(req.params)
   try {
     const exercises = await Exercise.find({ "username": req.params.username }).sort({ date: 'desc' });
     res.json(exercises);
@@ -27,7 +25,6 @@ router.get('/user/:username', async (req, res) => {
 
 // POST: Add a new exercise
 router.post('/add', async (req, res) => {
-  console.log(req.body)
   try {
     const { username, exerciseType, description, duration, date } = req.body;
 
@@ -48,7 +45,6 @@ router.post('/add', async (req, res) => {
 
 // GET: Retrieve an exercise by ID
 router.get('/:id', async (req, res) => {
-  console.log('getting exercise for id', req.params)
   try {
     const exercise = await Exercise.findById(req.params.id);
     console.log(exercise)
@@ -64,7 +60,6 @@ router.get('/:id', async (req, res) => {
 
 // DELETE: Delete an exercise by ID
 router.delete('/:id', async (req, res) => {
-  console.log('delete', req.params)
   try {
     const deletedExercise = await Exercise.findByIdAndDelete(req.params.id);
     if (!deletedExercise) {
