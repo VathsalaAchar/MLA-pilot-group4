@@ -8,17 +8,32 @@ import config from '../config';
 const Manage = ({ currentUser }) => {
   const [exercises, setExercises] = useState([]);
 
-  useEffect(() => {
-    const url = `${config.apiUrl}/exercises/${currentUser}`;
-
-    axios.get(url)
-      .then(response => {
+  const getExercises = async () => {
+    try {
+      const url = `${config.apiUrl}/exercises/${currentUser}`;
+      const response = await axios.get(url);
+      if (response.data) {
         setExercises(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the data!', error);
-      });
-  }, [currentUser]);
+      } else {
+        console.error('There was an error fetching the data!', response.data);
+        setExercises([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch exercises', error);
+    }
+  };
+
+  useEffect(() => {
+    getExercises();
+  }, [exercises, currentUser]);
+
+  const deleteExercise = (id) => {
+    axios.delete(`${config.apiUrl}/exercises/${id}`).then((response) => {
+      getExercises();
+      console.log(response.data.message)
+    });
+  };
+
 
   return (
     <div className="journal-container">
@@ -28,7 +43,19 @@ const Manage = ({ currentUser }) => {
         {exercises && exercises.length > 0 ? (
           exercises.map((exercise, index) => (
             <li key={index} className="exercise-journal-data">
-              {exercise.exerciseType} for {exercise.duration} mins on {moment(exercise.date).format('MMM DD, YYYY')}
+              <div>
+                <div><b>{moment(exercise.date).format('MMM DD, YYYY')}</b></div>
+                <div>{exercise.exerciseType}</div>
+                <div>{exercise.duration} mins</div>
+              </div>
+              <div>
+                <button className='btn'>
+                  Edit
+                </button>
+                <button className='btn' onClick={() => deleteExercise(exercise._id)}>
+                  Delete
+                </button>
+              </div>
             </li>
           ))
         ) : (
