@@ -4,12 +4,22 @@ const Exercise = require('../models/exercise.model');
 
 
 // GET: Retrieve all exercises
+router.get('/', async (req, res) => {
+  console.log(req.params)
+  try {
+    const exercises = await Exercise.find().sort({ date: 'desc' });
+    res.json(exercises);
+  } catch (error) {
+    res.status(400).json({ error: 'Error: ' + error.message });
+  }
+});
+
+// GET: Retrieve all exercises for a user
 router.get('/:username', async (req, res) => {
   console.log(req.params)
   try {
     const exercises = await Exercise.find({ "username": req.params.username }).sort({ date: 'desc' });
     res.json(exercises);
-    console.log(exercises)
   } catch (error) {
     res.status(400).json({ error: 'Error: ' + error.message });
   }
