@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import './journal.css';
 import config from '../config';
 
+
 const Manage = ({ currentUser }) => {
   const [exercises, setExercises] = useState([]);
+  const navigate = useNavigate();
 
   const getExercises = async () => {
     try {
-      const url = `${config.apiUrl}/exercises/${currentUser}`;
+      const url = `${config.apiUrl}/exercises/user/${currentUser}`;
       const response = await axios.get(url);
       if (response.data) {
         setExercises(response.data);
@@ -34,6 +37,15 @@ const Manage = ({ currentUser }) => {
     });
   };
 
+  const updateExercise = (id) => {
+    axios.get(`${config.apiUrl}/exercises/${id}`).then((response) => {
+      console.log("update data", response.data)
+      navigate(`/trackExercise/`, {
+        state: response.data
+      });
+    });
+  };
+
 
   return (
     <div className="journal-container">
@@ -49,7 +61,7 @@ const Manage = ({ currentUser }) => {
                 <div>{exercise.duration} mins</div>
               </div>
               <div>
-                <button className='btn'>
+                <button className='btn' onClick={() => updateExercise(exercise._id)}>
                   Edit
                 </button>
                 <button className='btn' onClick={() => deleteExercise(exercise._id)}>
