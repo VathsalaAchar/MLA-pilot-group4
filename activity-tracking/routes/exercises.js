@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET: Retrieve all exercises for a user
-router.get('/:username', async (req, res) => {
+router.get('/user/:username', async (req, res) => {
   console.log(req.params)
   try {
     const exercises = await Exercise.find({ "username": req.params.username }).sort({ date: 'desc' });
@@ -48,8 +48,10 @@ router.post('/add', async (req, res) => {
 
 // GET: Retrieve an exercise by ID
 router.get('/:id', async (req, res) => {
+  console.log('getting exercise for id', req.params)
   try {
     const exercise = await Exercise.findById(req.params.id);
+    console.log(exercise)
     if (!exercise) {
       res.status(404).json({ error: 'Exercise not found' });
       return;
@@ -62,6 +64,7 @@ router.get('/:id', async (req, res) => {
 
 // DELETE: Delete an exercise by ID
 router.delete('/:id', async (req, res) => {
+  console.log('delete', req.params)
   try {
     const deletedExercise = await Exercise.findByIdAndDelete(req.params.id);
     if (!deletedExercise) {
@@ -77,9 +80,9 @@ router.delete('/:id', async (req, res) => {
 // PUT: Update an exercise by ID
 router.put('/update/:id', async (req, res) => {
   try {
-    const { username, description, duration, date } = req.body;
+    const { username, exerciseType, description, duration, date } = req.body;
 
-    if (!username || !description || !duration || !date) {
+    if (!username || !exerciseType || !description || !duration || !date) {
       res.status(400).json({ error: 'All fields are required' });
       return;
     }
