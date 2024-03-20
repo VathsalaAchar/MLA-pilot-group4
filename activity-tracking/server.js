@@ -32,6 +32,9 @@ connection.on('error', (error) => {
 const exercisesRouter = require('./routes/exercises');
 app.use('/exercises', exercisesRouter);
 
+const weeklyTargetsRouter = require('./routes/weeklytargets');
+app.use('/targets', weeklyTargetsRouter);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
