@@ -16,9 +16,6 @@ const baseUri = process.env.MONGO_URI || config.mongoUri;
 const database = process.env.MONGO_DB || config.mongoDb;
 const mongoDB = `${baseUri}/${database}?authsource=admin`;
 
-const exercises = []
-const targets = []
-
 const mongoose = require('mongoose');
 mongoose.set("strictQuery", false);
 
