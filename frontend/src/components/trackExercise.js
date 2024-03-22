@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom'
 import { Button, Form } from 'react-bootstrap';
-import { trackExercise } from '../api';
+import { trackExercise, updateExercise } from '../api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import IconButton from '@material-ui/core/IconButton';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
@@ -11,15 +12,18 @@ import OtherIcon from '@material-ui/icons/HelpOutline';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+
 const TrackExercise = ({ currentUser }) => {
+  const location = useLocation();
+  const toUpdate = location.state?._id ? true : false;
   const [state, setState] = useState({
-    exerciseType: '',
-    description: '',
-    duration: 0,
-    date: new Date(),
+    exerciseType: location.state?.exerciseType ?? '',
+    description: location.state?.description ?? '',
+    duration: location.state?.duration ?? 0,
+    date: new Date(location.state?.date ?? Date()),
   });
   const [message, setMessage] = useState('');
-  const [error, setError] = useState(''); 
+  const [error, setError] = useState('');
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -29,11 +33,11 @@ const TrackExercise = ({ currentUser }) => {
       return;
     }
 
-    if (state.duration <=0 ) {
+    if (state.duration <= 0) {
       setError('Please enter valid duration');
       return;
     }
-    
+
     if (!state.exerciseType) {
       setError('Please select an exercise type');
       return;
@@ -44,9 +48,28 @@ const TrackExercise = ({ currentUser }) => {
       ...state,
     };
 
+    const dataToUpdate = {
+      username: currentUser,
+      id: location?.state?._id,
+      ...state,
+    }
+
     try {
-      const response = await trackExercise(dataToSubmit);
-      console.log(response.data);
+
+      if (toUpdate) {
+        console.log('data to update', dataToUpdate);
+        const id = location.state._id;
+        const response = await updateExercise(id, dataToUpdate);
+        console.log('updated record', response.data);
+
+        setMessage('Activity updated successfully!');
+
+      } else {
+        const response = await trackExercise(dataToSubmit);
+        console.log('create new record', response.data);
+
+        setMessage('Activity logged successfully! Well done!');
+      }
 
       setState({
         exerciseType: '',
@@ -54,11 +77,9 @@ const TrackExercise = ({ currentUser }) => {
         duration: 0,
         date: new Date(),
       });
-
-      setMessage('Activity logged successfully! Well done!');
       setTimeout(() => setMessage(''), 2000);
       setError('');
-      
+
     } catch (error) {
       console.error('There was an error logging your activity!', error);
       setError('Failed to log activity. Please try again.');
@@ -69,10 +90,10 @@ const TrackExercise = ({ currentUser }) => {
     <div>
       <h3>Track exercise</h3>
       <Form onSubmit={onSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
-        
+
         <Form.Group controlId="formDate" className="form-margin">
           <Form.Label>Date:</Form.Label>
-          <DatePicker 
+          <DatePicker
             selected={state.date}
             onChange={(date) => setState({ ...state, date })}
             dateFormat="yyyy/MM/dd"
@@ -92,25 +113,25 @@ const TrackExercise = ({ currentUser }) => {
             <FitnessCenterIcon fontSize="large" />
           </IconButton>
           <IconButton color={state.exerciseType === 'Other' ? "primary" : "default"} onClick={() => setState({ ...state, exerciseType: 'Other' })} title="Other">
-            <OtherIcon fontSize="large" /> 
+            <OtherIcon fontSize="large" />
           </IconButton>
         </div>
         <Form.Group controlId="description" style={{ marginBottom: '20px' }}>
           <Form.Label>Description:</Form.Label>
-          <Form.Control 
+          <Form.Control
             as="textarea"
             rows={3}
-            required 
-            value={state.description} 
+            required
+            value={state.description}
             onChange={(e) => setState({ ...state, description: e.target.value })}
           />
         </Form.Group>
         <Form.Group controlId="duration" style={{ marginBottom: '40px' }}>
           <Form.Label>Duration (in minutes):</Form.Label>
-          <Form.Control 
-            type="number" 
-            required 
-            value={state.duration} 
+          <Form.Control
+            type="number"
+            required
+            value={state.duration}
             onChange={(e) => setState({ ...state, duration: e.target.value })}
           />
         </Form.Group>
@@ -119,7 +140,7 @@ const TrackExercise = ({ currentUser }) => {
         </Button>
       </Form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {message && <p style={{color: 'green'}}>{message}</p>}
+      {message && <p style={{ color: 'green' }}>{message}</p>}
     </div>
   );
 };

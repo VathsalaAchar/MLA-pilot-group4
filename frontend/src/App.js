@@ -12,6 +12,7 @@ import Footer from './components/footer';
 import Login from './components/login';
 import Signup from './components/signup';
 import Journal from './components/journal';
+import Manage from './components/manage';
 import logo from './img/CFG_logo.png'; // Update the path to your logo file
 
 
@@ -53,7 +54,8 @@ function App() {
               <Route path="/trackExercise" element={isLoggedIn ? <TrackExercise currentUser={currentUser} /> : <Navigate to="/login" />} />
               <Route path="/statistics" element={isLoggedIn ? <Statistics currentUser={currentUser} /> : <Navigate to="/login" />} />
               <Route path="/journal" element={isLoggedIn ? <Journal currentUser={currentUser} /> : <Navigate to="/login" />} />
-              <Route path="/" element={isLoggedIn ? <Navigate to="/trackExercise" /> : <Navigate to="/login" />} />
+              <Route path="/manage" element={isLoggedIn ? <Manage currentUser={currentUser} /> : <Navigate to="/login" />} />
+            <Route path="/" element={isLoggedIn ? <Navigate to="/trackExercise" /> : <Navigate to="/login" />} />
             </Routes>
           </div>
           <Footer />

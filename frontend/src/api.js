@@ -8,3 +8,5 @@ const api = axios.create({
 });
 
 export const trackExercise = payload => api.post(`/exercises/add`, payload);
+
+export const updateExercise = (id, payload) => api.put(`/exercises/update/${id}`, payload);
