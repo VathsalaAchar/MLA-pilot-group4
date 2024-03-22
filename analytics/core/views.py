@@ -1,6 +1,7 @@
+from flask import current_app as app
 from core.gql_schema import schema
-from core import app
-from core.models import stats_aggregate_by_exercise_type, db
+from core.models import mongo
+from flask import Blueprint
 from flask import jsonify, request
 from bson import json_util
 import traceback
@@ -10,21 +11,53 @@ from datetime import datetime, timedelta
 from ariadne.explorer import ExplorerGraphiQL
 from ariadne import graphql_sync
 
+stats_page = Blueprint('stats_page', __name__)
 
-@app.route('/')
+
+@stats_page.route('/')
 def index():
-    exercises = db.exercises.find()
+    exercises = mongo.db.exercises.find()
     exercises_list = list(exercises)
     return json_util.dumps(exercises_list)
 
 
-@app.route('/stats')
+@stats_page.route('/stats')
 def stats():
-    stats = stats_aggregate_by_exercise_type()
+    pipeline = [
+        {
+            "$group": {
+                "_id": {
+                    "username": "$username",
+                    "exerciseType": "$exerciseType"
+                },
+                "totalDuration": {"$sum": "$duration"}
+            }
+        },
+        {
+            "$group": {
+                "_id": "$_id.username",
+                "exercises": {
+                    "$push": {
+                        "exerciseType": "$_id.exerciseType",
+                        "totalDuration": "$totalDuration"
+                    }
+                }
+            }
+        },
+        {
+            "$project": {
+                "username": "$_id",
+                "exercises": 1,
+                "_id": 0
+            }
+        }
+    ]
+
+    stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)
 
 
-@app.route('/stats/<username>', methods=['GET'])
+@stats_page.route('/stats/<username>', methods=['GET'])
 def user_stats(username):
     pipeline = [
         {
@@ -59,11 +92,11 @@ def user_stats(username):
         }
     ]
 
-    stats = list(db.exercises.aggregate(pipeline))
+    stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)
 
 
-@app.route('/stats/weekly/', methods=['GET'])
+@stats_page.route('/stats/weekly/', methods=['GET'])
 def weekly_user_stats():
     username = request.args.get('user')
     start_date_str = request.args.get('start')
@@ -110,10 +143,11 @@ def weekly_user_stats():
     ]
 
     try:
-        stats = list(db.exercises.aggregate(pipeline))
+        stats = list(mongo.db.exercises.aggregate(pipeline))
         return jsonify(stats=stats)
     except Exception as e:
-        app.logger.error(f"An error occurred while querying MongoDB: {e}")
+        app.logger.error(
+            f"An error occurred while querying MongoDB: {e}")
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
 
@@ -121,12 +155,12 @@ def weekly_user_stats():
 explorer_html = ExplorerGraphiQL().html(None)
 
 
-@app.route('/stats/graphql', methods=["GET"])
+@stats_page.route('/stats/graphql', methods=["GET"])
 def graphql_explorer():
     return explorer_html, 200
 
 
-@app.route("/stats/graphql", methods=["POST"])
+@stats_page.route("/stats/graphql", methods=["POST"])
 def graphql_server():
     data = request.get_json()
     success, result = graphql_sync(
