@@ -25,29 +25,19 @@ router.post('/add', async (req, res) => {
             weekStartDate
         } = req.body;
 
-        const existingWeeklyTarget = await WeeklyTarget.findOne({ username, weekStartDate });
+        const newWeeklyTarget = new WeeklyTarget({
+            username,
+            runningTarget,
+            cyclingTarget,
+            swimmingTarget,
+            gymTarget,
+            otherTarget,
+            weekStartDate
+        });
 
-        if (existingWeeklyTarget) {
-            const updatedWeeklyTarget = await WeeklyTarget.findOneAndUpdate(
-                { username, weekStartDate },
-                { runningTarget, cyclingTarget, swimmingTarget, gymTarget, otherTarget },
-                { new: true }
-            );
-            return res.status(200).json(updatedWeeklyTarget);
-        } else {
-            const newWeeklyTarget = new WeeklyTarget({
-                username,
-                runningTarget,
-                cyclingTarget,
-                swimmingTarget,
-                gymTarget,
-                otherTarget,
-                weekStartDate
-            });
+        const savedWeeklyTarget = await newWeeklyTarget.save();
+        return res.status(201).json(savedWeeklyTarget);
 
-            const savedWeeklyTarget = await newWeeklyTarget.save();
-            return res.status(201).json(savedWeeklyTarget);
-        }
     } catch (error) {
         res.status(400).json({ error: 'Error: ' + error.message });
     }
@@ -69,7 +59,6 @@ router.patch('/update', async (req, res) => {
         const existingWeeklyTarget = await WeeklyTarget.findOne({ username, weekStartDate });
 
         if (existingWeeklyTarget) {
-            // If target exists, update it
             const updatedWeeklyTarget = await WeeklyTarget.findOneAndUpdate(
                 { username, weekStartDate },
                 { runningTarget, cyclingTarget, swimmingTarget, gymTarget, otherTarget },
@@ -77,7 +66,6 @@ router.patch('/update', async (req, res) => {
             );
             return res.status(200).json(updatedWeeklyTarget);
         } else {
-            // If target doesn't exist, return a meaningful error message
             return res.status(404).json({ error: 'Weekly target not found for update. Create a new one instead.' });
         }
     } catch (error) {
