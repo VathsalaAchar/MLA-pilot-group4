@@ -18,13 +18,7 @@ const iconMap = {
 const Journal = ({ currentUser }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week'));
   const [endDate, setEndDate] = useState(moment().endOf('week'));
-  const [exerciseTargets, setExerciseTargets] = useState({
-    Running: 0,
-    Cycling: 0,
-    Gym: 0,
-    Swimming: 0,
-    Other: 0
-  });
+  const [exerciseTargets, setExerciseTargets] = useState({});
   const [updatedTargets, setUpdatedTargets] = useState({});
   const [exercises, setExercises] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,15 +30,23 @@ const Journal = ({ currentUser }) => {
       const response = await axios.get(url);
       console.log('API Response:', response.data);
       if (response.data.stats && Array.isArray(response.data.stats)) {
-        setExercises(response.data.stats);
+        const sortedExercises = response.data.stats.sort((a, b) => a.id - b.id);
+        setExercises(sortedExercises);
       } else {
         console.error('Unexpected response structure:', response.data);
-        setExercises([]);
+        setExerciseTargets({
+          Running: 0,
+          Cycling: 0,
+          Gym: 0,
+          Swimming: 0,
+          Other: 0
+        });
       }
     } catch (error) {
       console.error('Failed to fetch exercises', error);
     }
   };
+  
 
   useEffect(() => {
     fetchExercises();
@@ -107,11 +109,11 @@ const Journal = ({ currentUser }) => {
         });
       } else {
         setUpdatedTargets({
-          Running: 0,
-          Cycling: 0,
-          Gym: 0,
-          Swimming: 0,
-          Other: 0
+          Running: exerciseTargets.Running || 0,
+          Cycling: exerciseTargets.Cycling || 0,
+          Gym: exerciseTargets.Gym || 0,
+          Swimming: exerciseTargets.Swimming || 0,
+          Other: exerciseTargets.Other || 0
         });
       }
       setShowEditModal(true);
@@ -119,7 +121,7 @@ const Journal = ({ currentUser }) => {
       console.error('Error fetching weekly targets:', error);
     }
   };
-
+  
   const handleCloseModal = () => {
     setShowEditModal(false);
   };
@@ -127,32 +129,53 @@ const Journal = ({ currentUser }) => {
   const handleSaveTargets = async () => {
     try {
       const maxWeeklyTarget = 10080;
-      const isInvalid = Object.values(updatedTargets).some(value => isNaN(value) || value < 0 || value > maxWeeklyTarget);
+      const isInvalid = Object.values(exerciseTargets).some(value => isNaN(value) || value < 0 || value > maxWeeklyTarget);
       if (isInvalid) {
         alert(`Invalid input! Please enter a value between 0 and ${maxWeeklyTarget}.`);
         return;
       }
-
-      const response = await axios.post(`${config.apiUrl}/targets/add`, {
-        username: currentUser,
-        runningTarget: updatedTargets.Running,
-        cyclingTarget: updatedTargets.Cycling,
-        gymTarget: updatedTargets.Gym,
-        swimmingTarget: updatedTargets.Swimming,
-        otherTarget: updatedTargets.Other,
-        weekStartDate: startDate.toDate()
-      });
-      if (response.status === 200) {
-        setExerciseTargets(updatedTargets);
-        setShowEditModal(false);
-        fetchExercises();
+      const isTargetSetForFirstTime = Object.values(exerciseTargets).every(value => value === 0);
+      console.log(isTargetSetForFirstTime)
+      if (isTargetSetForFirstTime || !Object.keys(exerciseTargets).length) {
+        const response = await axios.post(`${config.apiUrl}/targets/add`, {
+          username: currentUser,
+          runningTarget: updatedTargets.Running,
+          cyclingTarget: updatedTargets.Cycling,
+          gymTarget: updatedTargets.Gym,
+          swimmingTarget: updatedTargets.Swimming,
+          otherTarget: updatedTargets.Other,
+          weekStartDate: startDate.toDate()
+        });
+        if (response.status === 201) {
+          setExerciseTargets(updatedTargets);
+          fetchExercises();
+        } else {
+          console.error('Failed to save targets:', response.statusText);
+        }
       } else {
-        console.error('Failed to save targets:', response.statusText);
+        const response = await axios.patch(`${config.apiUrl}/targets/update`, {
+          username: currentUser,
+          runningTarget: updatedTargets.Running,
+          cyclingTarget: updatedTargets.Cycling,
+          gymTarget: updatedTargets.Gym,
+          swimmingTarget: updatedTargets.Swimming,
+          otherTarget: updatedTargets.Other,
+          weekStartDate: startDate.toDate()
+        });
+        if (response.status === 200) {
+          setExerciseTargets(updatedTargets); 
+          fetchExercises();
+        } else {
+          console.error('Failed to update targets:', response.statusText);
+        }
       }
+      
+      setShowEditModal(false); 
+      setUpdatedTargets({});
     } catch (error) {
       console.error('Error saving targets:', error);
     }
-  };
+  };    
 
   return (
     <div className="journal-container">

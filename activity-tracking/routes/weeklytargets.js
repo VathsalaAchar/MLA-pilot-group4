@@ -53,4 +53,36 @@ router.post('/add', async (req, res) => {
     }
 });
 
+// PATCH: Update an existing weekly target
+router.patch('/update', async (req, res) => {
+    try {
+        const {
+            username,
+            runningTarget,
+            cyclingTarget,
+            swimmingTarget,
+            gymTarget,
+            otherTarget,
+            weekStartDate
+        } = req.body;
+
+        const existingWeeklyTarget = await WeeklyTarget.findOne({ username, weekStartDate });
+
+        if (existingWeeklyTarget) {
+            // If target exists, update it
+            const updatedWeeklyTarget = await WeeklyTarget.findOneAndUpdate(
+                { username, weekStartDate },
+                { runningTarget, cyclingTarget, swimmingTarget, gymTarget, otherTarget },
+                { new: true }
+            );
+            return res.status(200).json(updatedWeeklyTarget);
+        } else {
+            // If target doesn't exist, return a meaningful error message
+            return res.status(404).json({ error: 'Weekly target not found for update. Create a new one instead.' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: 'Error: ' + error.message });
+    }
+});
+
 module.exports = router;
