@@ -88,7 +88,8 @@ const TrackExercise = ({ currentUser }) => {
 
   return (
     <div>
-      <h3>Track exercise</h3>
+      <h4>Track exercise</h4>
+      <hr/>
       <Form onSubmit={onSubmit} style={{ maxWidth: '400px', margin: 'auto' }}>
 
         <Form.Group controlId="formDate" className="form-margin">

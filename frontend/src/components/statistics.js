@@ -5,11 +5,11 @@ import { PieChart, Pie, ResponsiveContainer, Sector, Cell, Text } from 'recharts
 import config from '../config';
 
 const iconMap = {
-  Running: '#322142',
-  Cycling: '#03A6A6',
-  Gym: '#00563E',
-  Swimming: '#CE466B',
-  Other: '#F25757'
+  Running: '#882255',
+  Cycling: '#785EF0',
+  Gym: '#4B0092',
+  Swimming: '#0072B2',
+  Other: '#117733'
 };
 
 const Statistics = ({ currentUser }) => {
@@ -84,6 +84,7 @@ const Statistics = ({ currentUser }) => {
   return (
     <div className="stats-container">
       <h4>Well done, {currentUser}! This is your overall effort:</h4>
+      <hr/>
       {loading ? (
         <p>Loading...</p>
       ) : exercisesData.length > 0 ? (

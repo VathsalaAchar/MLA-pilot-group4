@@ -35,28 +35,22 @@ function App() {
     <MantineProvider>
       <div className="App">
         <Router>
-          <div className="appTitle">
-            <header>
-              <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
-              <h1>MLA Fitness App</h1>
-            </header>
-          </div>
-
-          {isLoggedIn && <NavbarComponent onLogout={handleLogout} />}
-
-          <div className="componentContainer">
-            <Routes>
-              <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
-              <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup onSignup={(username) => {
-                setIsLoggedIn(true);
-                setCurrentUser(username);
-              }} />} />
-              <Route path="/trackExercise" element={isLoggedIn ? <TrackExercise currentUser={currentUser} /> : <Navigate to="/login" />} />
-              <Route path="/statistics" element={isLoggedIn ? <Statistics currentUser={currentUser} /> : <Navigate to="/login" />} />
-              <Route path="/journal" element={isLoggedIn ? <Journal currentUser={currentUser} /> : <Navigate to="/login" />} />
-              <Route path="/manage" element={isLoggedIn ? <Manage currentUser={currentUser} /> : <Navigate to="/login" />} />
-            <Route path="/" element={isLoggedIn ? <Navigate to="/trackExercise" /> : <Navigate to="/login" />} />
-            </Routes>
+          <div className="grid-container">
+            {isLoggedIn && <NavbarComponent onLogout={handleLogout} logo={logo} />}
+            <div className="componentContainer">
+              <Routes>
+                <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
+                <Route path="/signup" element={isLoggedIn ? <Navigate to="/" /> : <Signup onSignup={(username) => {
+                  setIsLoggedIn(true);
+                  setCurrentUser(username);
+                }} />} />
+                <Route path="/trackExercise" element={isLoggedIn ? <TrackExercise currentUser={currentUser} /> : <Navigate to="/login" />} />
+                <Route path="/statistics" element={isLoggedIn ? <Statistics currentUser={currentUser} /> : <Navigate to="/login" />} />
+                <Route path="/journal" element={isLoggedIn ? <Journal currentUser={currentUser} /> : <Navigate to="/login" />} />
+                <Route path="/manage" element={isLoggedIn ? <Manage currentUser={currentUser} /> : <Navigate to="/login" />} />
+                <Route path="/" element={isLoggedIn ? <Navigate to="/trackExercise" /> : <Navigate to="/login" />} />
+              </Routes>
+            </div>
           </div>
           <Footer />
         </Router>
