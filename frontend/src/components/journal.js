@@ -3,7 +3,7 @@ import { Grid, Card, RingProgress, Text, Center, Modal, TextInput, Tooltip } fro
 import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon } from '@tabler/icons-react';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
-import './journal.css'; 
+import './journal.css';
 import axios from 'axios';
 import config from '../config';
 
@@ -28,6 +28,7 @@ const Journal = ({ currentUser }) => {
   const [updatedTargets, setUpdatedTargets] = useState({});
   const [exercises, setExercises] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [isCurrentWeek, setIsCurrentWeek] = useState(true);
 
   const fetchExercises = async () => {
     try {
@@ -71,6 +72,7 @@ const Journal = ({ currentUser }) => {
           Other: 0
         });
       }
+      setIsCurrentWeek(moment().isSame(startDate, 'week'));
     } catch (error) {
       console.error('Error fetching weekly targets:', error);
     }
@@ -124,7 +126,7 @@ const Journal = ({ currentUser }) => {
 
   const handleSaveTargets = async () => {
     try {
-      const maxWeeklyTarget = 10080; 
+      const maxWeeklyTarget = 10080;
       const isInvalid = Object.values(updatedTargets).some(value => isNaN(value) || value < 0 || value > maxWeeklyTarget);
       if (isInvalid) {
         alert(`Invalid input! Please enter a value between 0 and ${maxWeeklyTarget}.`);
@@ -152,9 +154,6 @@ const Journal = ({ currentUser }) => {
     }
   };
 
-  const isCurrentWeek = moment().startOf('week').isSame(startDate, 'week');
-  const isEditable = isCurrentWeek; 
-
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
@@ -164,15 +163,9 @@ const Journal = ({ currentUser }) => {
         {!isCurrentWeek && <Button className="button-small" onClick={goToNextWeek}>Next &rarr;</Button>}
       </div>
 
-      <Tooltip
-        label={!isEditable ? "Can't edit previous week target" : ""}
-        position="right"
-        withArrow
-      >
-        <div className="weekly-target" onClick={isEditable ? handleEditTargets : undefined} style={{ cursor: isEditable ? 'pointer' : 'not-allowed' }}>
-          <Text style={{ fontSize: '18px', fontWeight: 'bold', color: isEditable ? 'inherit' : '#ccc' }}>Edit Weekly Target</Text>
-        </div>
-      </Tooltip>
+      <div className="weekly-target" onClick={handleEditTargets} style={{ cursor: 'pointer' }}>
+        <Text style={{ fontSize: '18px', fontWeight: 'bold' }}>Edit Weekly Target</Text>
+      </div>
 
       {showEditModal && (
         <Modal opened={showEditModal} onClose={handleCloseModal} title="Edit Weekly Targets" size="sm">
@@ -184,7 +177,7 @@ const Journal = ({ currentUser }) => {
                   value={updatedTargets[exerciseType] || ''}
                   onChange={(event) => {
                     const inputValue = event.target.value.trim();
-                    const value = inputValue === '' ? '' : parseInt(inputValue, 10); 
+                    const value = inputValue === '' ? '' : parseInt(inputValue, 10);
                     if (inputValue === '' || (!isNaN(value) && value >= 0)) {
                       setUpdatedTargets(prevState => ({ ...prevState, [exerciseType]: value }));
                     }
@@ -192,12 +185,18 @@ const Journal = ({ currentUser }) => {
                   type="number"
                   min={0}
                   max={10080}
+                  disabled={!isCurrentWeek}
                 />
               </Grid.Col>
             ))}
           </Grid>
+          {!isCurrentWeek && (
+            <Text style={{ marginTop: '10px', color: 'red' }}>
+              Editing for previous weeks is not allowed.
+            </Text>
+          )}
           <div style={{ textAlign: 'right', marginTop: '16px' }}>
-            <Button onClick={handleSaveTargets} variant="primary">
+            <Button onClick={handleSaveTargets} variant="primary" disabled={!isCurrentWeek}>
               Save
             </Button>
           </div>
@@ -222,7 +221,11 @@ const Journal = ({ currentUser }) => {
                     {exercise.exerciseType}
                   </Text>
                   <Text className="exercise-time" fw={700} size="l">
-                    {exercise.totalDuration} out of {exerciseTargets[exercise.exerciseType]} min
+                    {exerciseTargets[exercise.exerciseType] ? (
+                      `${exercise.totalDuration} out of ${exerciseTargets[exercise.exerciseType]} mins`
+                    ) : (
+                      `${exercise.totalDuration} mins`
+                    )}
                   </Text>
                 </div>
               </Card>
