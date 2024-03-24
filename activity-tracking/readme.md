@@ -22,6 +22,14 @@ nodemon server
 docker run --name mongodb -d -p 27017:27017 -v mongodbdata:/data/db mongo:latest
 ```
 
+#### Populating database with test data
+
+```sh
+cd activity-tracking
+npm install
+node populatedb.js
+```
+
 ### Connect to MongoDB
 
 ```
@@ -33,11 +41,10 @@ show registered activities:
 db.exercises.find()
 ```
 
-show registered users:
+show weekly targets:
 ```
-db.users.find()
+db.weeklytargets.find()
 ```
-
 
 ## Deployment
 The application is containerized using Docker and is configured for AWS deployment. A GitHub Actions pipeline is configured for CI/CD at [deploy-activity-tracking](../.github/workflows/deploy-ActivityTracking.yml) .

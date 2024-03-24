@@ -19,6 +19,20 @@
     gap: 10px;
     margin-bottom: 20px;
 }
+.weekly-target {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.weekly-target:hover {
+    border-color: #485F73;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
 
 ul {
     padding-left: 0;
@@ -35,4 +49,20 @@ li {
 .button-small {
     padding: 5px 10px;
     font-size: 0.8rem;
+}
+
+/* New style for Weekly Target */
+.weekly-target {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    border: 1px solid #f0f0f0;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.weekly-target:hover {
+    border-color: #485F73;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
