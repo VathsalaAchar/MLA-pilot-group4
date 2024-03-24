@@ -61,40 +61,17 @@ const Manage = ({ currentUser }) => {
         setExercises(response.data);
       } else {
         console.error('There was an error fetching the data!', response.data);
-        setExercises(dummyexercises); // Set dummy data when there's an error or no data
+        setExercises([]);
       }
     } catch (error) {
       console.error('Failed to fetch exercises', error);
-      setExercises(dummyexercises); // Set dummy data when there's an error or no data
+      setExercises([]);
     }
   };
 
   useEffect(() => {
     getExercises();
   }, []);
-
-  // Dummy data for exercises
-  const dummyexercises = [
-    {
-      _id: 1,
-      date: "2024-03-20T08:00:00Z",
-      exerciseType: "Running",
-      duration: 30
-    },
-    {
-      _id: 2,
-      date: "2024-03-21T08:00:00Z",
-      exerciseType: "Cycling",
-      duration: 45
-    },
-    {
-      _id: 3,
-      date: "2024-03-22T08:00:00Z",
-      exerciseType: "Swimming",
-      duration: 60
-    },
-    // Add more exercise objects as needed
-  ];
 
   const handleDeleteExercise = async (id) => {
     axios.delete(`${config.apiUrl}/exercises/${id}`).then((response) => {
