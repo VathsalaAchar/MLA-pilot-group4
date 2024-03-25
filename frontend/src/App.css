@@ -134,6 +134,10 @@ input#duration {
 .appTitleLogin header h1 {
  margin-left: 20px;
  color: #882255;
+  
+input#distance {
+  width: 20%; 
+  margin: auto; 
 }
 
 .form-margin {
