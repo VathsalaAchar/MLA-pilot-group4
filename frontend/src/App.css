@@ -61,7 +61,6 @@ button.navigationButton:hover {
   background-color: #ff66b2;
 }
 
-/* Style the success message */
 p.successMessage {
   color: green;
   margin-bottom: 20px;
