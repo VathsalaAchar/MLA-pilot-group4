@@ -3,6 +3,8 @@ import { Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import config from '../config';
+import logo from '../img/CFG_logo.png';
+import '../App.css'
 
 const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -48,7 +50,13 @@ const Signup = ({ onSignup }) => {
 
 
   return (
-    <div>
+    <div className="login-container">
+      <div className="appTitleLogin">
+        <header>
+          <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
+          <h1>MLA Fitness App</h1>
+        </header>
+      </div>
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Form onSubmit={handleSignup}>
