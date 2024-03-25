@@ -1,12 +1,11 @@
 from ariadne import gql, make_executable_schema, QueryType
 from core.models import mongo
 
-
 type_defs = gql("""
     type Query {
         stats: [Stats]
     }
-                
+
     type Stats {
         username: String!
         exercises: [Exercise!]      
@@ -15,6 +14,10 @@ type_defs = gql("""
     type Exercise {
         exerciseType: ExerciseType!
         totalDuration: Int!
+        totalDistance: Int!
+        averagePace: Float
+        averageSpeed: Float
+        topSpeed: Float
     }
 
     enum ExerciseType {
@@ -28,7 +31,6 @@ type_defs = gql("""
 
 query = QueryType()
 
-
 @query.field("stats")
 def stats_resolver(*_):
     pipeline = [
@@ -38,7 +40,11 @@ def stats_resolver(*_):
                     "username": "$username",
                     "exerciseType": "$exerciseType"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalDistance": {"$sum": "$distance"},
+                "averagePace": {"$avg": "$pace"},
+                "averageSpeed": {"$avg": "$speed"},
+                "topSpeed": {"$max": "$speed"}
             }
         },
         {
@@ -47,7 +53,11 @@ def stats_resolver(*_):
                 "exercises": {
                     "$push": {
                         "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration"
+                        "totalDuration": "$totalDuration",
+                        "totalDistance": "$totalDistance",
+                        "averagePace": "$averagePace",
+                        "averageSpeed": "$averageSpeed",
+                        "topSpeed": "$topSpeed"
                     }
                 }
             }
@@ -63,6 +73,5 @@ def stats_resolver(*_):
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return stats
-
 
 schema = make_executable_schema(type_defs, query)

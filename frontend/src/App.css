@@ -61,6 +61,7 @@ button.navigationButton:hover {
   background-color: #ff66b2;
 }
 
+/* Style the success message */
 p.successMessage {
   color: green;
   margin-bottom: 20px;
@@ -91,53 +92,11 @@ p.successMessage {
 }
 
 .btn-success:hover {
-  background-color: #f03087 !important;  
+  background-color: #882255 !important;  
   border-color: #882255 !important; 
 }
 
 input#duration {
-  width: 20%; 
-  margin: auto; 
-}
-
-#appTitleLogin {
-  width: 50px; /* Adjust the width of the logo */
-  height: auto; /* Maintain aspect ratio */
-  margin-right: 30px; /* Add space between h1 and img */
-  width: 35px;
-  height: auto;
-}
-.appTitleLogin header {
-  display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: center; /* Align items horizontally */
-  margin-bottom: 20px; /* Adjust spacing */
-}
-.appTitleLogin header h1 {
- margin-left: 20px;
- color: #882255;
-}
-
-#appTitleLogin {
-  width: 50px; /* Adjust the width of the logo */
-  height: auto; /* Maintain aspect ratio */
-  margin-right: 30px; /* Add space between h1 and img */
-  width: 35px;
-  height: auto;
-}
-.appTitleLogin header {
-  display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: center; /* Align items horizontally */
-  margin-bottom: 20px; /* Adjust spacing */
-}
-.appTitleLogin header h1 {
- margin-left: 20px;
- color: #882255;
-}
-  
-input#distance {
-  width: 20%; 
   margin: auto; 
 }
 
@@ -181,9 +140,6 @@ input#distance {
     }
   }
 }
-
-
-
 
 .linkIcon {
   color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
