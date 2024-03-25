@@ -101,9 +101,22 @@ input#duration {
   margin: auto; 
 }
 
-input#distance {
-  width: 20%; 
-  margin: auto; 
+#appTitleLogin {
+  width: 50px; /* Adjust the width of the logo */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 30px; /* Add space between h1 and img */
+  width: 35px;
+  height: auto;
+}
+.appTitleLogin header {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: center; /* Align items horizontally */
+  margin-bottom: 20px; /* Adjust spacing */
+}
+.appTitleLogin header h1 {
+ margin-left: 20px;
+ color: #882255;
 }
 
 #appTitleLogin {
