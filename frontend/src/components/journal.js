@@ -8,11 +8,11 @@ import axios from 'axios';
 import config from '../config';
 
 const iconMap = {
-  Running: { icon: IconRun, color: '#322142' },
-  Cycling: { icon: IconBike, color: '#03A6A6' },
-  Gym: { icon: IconBarbell, color: '#00563E' },
-  Swimming: { icon: IconSwimming, color: '#CE466B' },
-  Other: { icon: IconHelpOctagon, color: '#F25757' }
+  Running: { icon: IconRun, color: '#882255' },
+  Cycling: { icon: IconBike, color: '#785EF0' },
+  Gym: { icon: IconBarbell, color: '#4B0092' },
+  Swimming: { icon: IconSwimming, color: '#0072B2' },
+  Other: { icon: IconHelpOctagon, color: '#117733' }
 };
 
 const Journal = ({ currentUser }) => {
@@ -180,6 +180,7 @@ const Journal = ({ currentUser }) => {
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
+      <hr/>
       <div className="date-range">
         <Button className="button-small" onClick={goToPreviousWeek}>&larr; Previous</Button>
         <span>{startDate.format('MMM DD, YYYY')} - {endDate.format('MMM DD, YYYY')}</span>
