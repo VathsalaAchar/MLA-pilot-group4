@@ -20,6 +20,7 @@ const TrackExercise = ({ currentUser }) => {
     exerciseType: location.state?.exerciseType ?? '',
     description: location.state?.description ?? '',
     duration: location.state?.duration ?? 0,
+    distance: location.state?.distance ?? 0,
     date: new Date(location.state?.date ?? Date()),
   });
   const [message, setMessage] = useState('');
@@ -35,6 +36,11 @@ const TrackExercise = ({ currentUser }) => {
 
     if (state.duration <= 0) {
       setError('Please enter valid duration');
+      return;
+    }
+
+    if ((state.exerciseType === 'Running' || state.exerciseType === 'Swimming') && state.distance <= 0) {
+      setError('Please enter valid distance');
       return;
     }
 
@@ -75,6 +81,7 @@ const TrackExercise = ({ currentUser }) => {
         exerciseType: '',
         description: '',
         duration: 0,
+        distance: 0,
         date: new Date(),
       });
       setTimeout(() => setMessage(''), 2000);
@@ -134,6 +141,15 @@ const TrackExercise = ({ currentUser }) => {
             required
             value={state.duration}
             onChange={(e) => setState({ ...state, duration: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group controlId="distance" style={{ marginBottom: '40px' }}>
+          <Form.Label>Distance (in kilometers):</Form.Label>
+          <Form.Control
+            type="number"
+            required
+            value={state.distance}
+            onChange={(e) => setState({ ...state, distance: e.target.value })}
           />
         </Form.Group>
         <Button variant="success" type="submit">

@@ -101,6 +101,11 @@ input#duration {
   margin: auto; 
 }
 
+input#distance {
+  width: 20%; 
+  margin: auto; 
+}
+
 #appTitleLogin {
   width: 50px; /* Adjust the width of the logo */
   height: auto; /* Maintain aspect ratio */
