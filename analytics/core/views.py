@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from ariadne.explorer import ExplorerGraphiQL
 from ariadne import graphql_sync
 
+from core.query import stats_query, stats_by_username_query
+
 stats_page = Blueprint('stats_page', __name__)
 
 @stats_page.route('/')
@@ -20,89 +22,14 @@ def index():
 
 @stats_page.route('/stats')
 def stats():
-    pipeline = [
-        {
-            "$group": {
-                "_id": {
-                    "username": "$username",
-                    "exerciseType": "$exerciseType"
-                },
-                "totalDuration": {"$sum": "$duration"},
-                "totalDistance": {"$sum": "$distance"},
-                "averagePace": {"$avg": "$pace"},
-                "averageSpeed": {"$avg": "$speed"},
-                "topSpeed": {"$max": "$speed"}
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id.username",
-                "exercises": {
-                    "$push": {
-                        "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration",
-                        "totalDistance": "$totalDistance",
-                        "averagePace": "$averagePace",
-                        "averageSpeed": "$averageSpeed",
-                        "topSpeed": "$topSpeed"
-                    }
-                }
-            }
-        },
-        {
-            "$project": {
-                "username": "$_id",
-                "exercises": 1,
-                "_id": 0
-            }
-        }
-    ]
+    pipeline = stats_query()
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)
 
 @stats_page.route('/stats/<username>', methods=['GET'])
 def user_stats(username):
-    pipeline = [
-        {
-            "$match": {"username": username}
-        },
-        {
-            "$group": {
-                "_id": {
-                    "username": "$username",
-                    "exerciseType": "$exerciseType"
-                },
-                "totalDuration": {"$sum": "$duration"},
-                "totalDistance": {"$sum": "$distance"},
-                "averagePace": {"$avg": "$pace"},
-                "averageSpeed": {"$avg": "$speed"},
-                "topSpeed": {"$max": "$speed"}
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id.username",
-                "exercises": {
-                    "$push": {
-                        "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration",
-                        "totalDistance": "$totalDistance",
-                        "averagePace": "$averagePace",
-                        "averageSpeed": "$averageSpeed",
-                        "topSpeed": "$topSpeed"
-                    }
-                }
-            }
-        },
-        {
-            "$project": {
-                "username": "$_id",
-                "exercises": 1,
-                "_id": 0
-            }
-        }
-    ]
+    pipeline = stats_by_username_query(username=username)
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)

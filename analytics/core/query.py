@@ -49,7 +49,11 @@ def stats_by_username_query(username):
                     "username": "$username",
                     "exerciseType": "$exerciseType"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalDistance": {"$sum": "$distance"},
+                "averagePace": {"$avg": "$pace"},
+                "averageSpeed": {"$avg": "$speed"},
+                "topSpeed": {"$max": "$speed"}
             }
         },
         {
@@ -58,7 +62,11 @@ def stats_by_username_query(username):
                 "exercises": {
                     "$push": {
                         "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration"
+                        "totalDuration": "$totalDuration",
+                        "totalDistance": "$totalDistance",
+                        "averagePace": "$averagePace",
+                        "averageSpeed": "$averageSpeed",
+                        "topSpeed": "$topSpeed"
                     }
                 }
             }
