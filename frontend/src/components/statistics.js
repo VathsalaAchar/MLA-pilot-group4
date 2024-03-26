@@ -15,7 +15,7 @@ const iconMap = {
 
 const Statistics = ({ currentUser }) => {
   const [exercisesData, setExercisesData] = useState([]);
-  const [activeDurationIndex, setActiveDurationIndex] = useState(0); 
+  const [activeDurationIndex, setActiveDurationIndex] = useState(0);
   const [activeDistanceIndex, setActiveDistanceIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +46,7 @@ const Statistics = ({ currentUser }) => {
     const ex = mx + (cos >= 0 ? 1 : -1) * 22;
     const ey = my;
     const textAnchor = cos >= 0 ? 'start' : 'end';
-    const labelText = dataType === 'duration' ? ` Duration: ${value} min` : ` Distance: ${value} km`;
+    const labelText = dataType === 'duration' ? `${value} min` : `${value} km`;
 
     return (
       <g>
@@ -73,7 +73,7 @@ const Statistics = ({ currentUser }) => {
         />
         <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333" width={50} style={{ overflow: 'visible' }}>
+        <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333" width={80} style={{ overflow: 'visible' }}>
           {labelText}
         </Text>
       </g>
@@ -99,11 +99,11 @@ const Statistics = ({ currentUser }) => {
           <ResponsiveContainer width="50%" height={400}>
             <PieChart>
               <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
-                Total Duration for Exercises
+                Total Duration for Exercises 
               </text>
               <Pie
                 activeIndex={activeDurationIndex}
-                activeShape={(props) => renderActiveShape(props, exercisesData,'duration')}
+                activeShape={(props) => renderActiveShape(props, exercisesData, 'duration')}
                 data={exercisesData}
                 cx="50%"
                 cy="50%"
@@ -154,25 +154,33 @@ const Statistics = ({ currentUser }) => {
               <div className='inner'>
                 <div>
                   <MText fz="xl" className='label'>
-                    {entry.exerciseType} Stats
+                    {entry.exerciseType}
                   </MText>
                   <div>
                     <MText className='lead' mt={30}>
-                      {entry.topSpeed !== null ? `${entry.topSpeed} km/hr` : 'N/A'}
+                      {entry.topSpeed !== null ?
+                        <span>{entry.topSpeed} <span className="unit">km/hr</span></span>
+                        : 'N/A'}
                     </MText>
                     <MText fz="xs" c="dimmed">
                       Top Speed
                     </MText>
                   </div>
-                  <Group mt="lg">
+                  <Group mt="lg" >
                     <div >
-                      <MText className='label'>{entry.averagePace !== null ? entry.averagePace.toFixed(2) + ' min/km' : 'N/A'}</MText>
+                      <MText className='label'>{entry.averagePace !== null ?
+                        <span>{entry.averagePace.toFixed(2)} <span className="unit">min/km</span></span>
+                        : 'N/A'}
+                      </MText>
                       <MText size="xs" c="dimmed">
                         Average Pace
                       </MText>
                     </div>
-                    <div >
-                      <MText className='label'>{entry.averageSpeed !== null ? entry.averageSpeed.toFixed(2) + ' km/hr' : 'N/A'}</MText>
+                    <div className="average-speed">
+                      <MText className='label'>{entry.averageSpeed !== null ?
+                        <span>{entry.averageSpeed.toFixed(2)} <span className="unit">km/hr</span></span>
+                        : 'N/A'}
+                      </MText>
                       <MText size="xs" c="dimmed">
                         Average Speed
                       </MText>
@@ -180,6 +188,7 @@ const Statistics = ({ currentUser }) => {
                   </Group>
                 </div>
               </div>
+
             </Card>
           ) : null
         ))}

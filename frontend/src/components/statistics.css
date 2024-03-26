@@ -41,6 +41,17 @@
   display: flex;
 }
 
+.unit {
+  font-size: 10px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.average-speed {
+  margin-left: 25px;
+}
+
+
 @media (max-width: 576px) {
   .charts-container {
     flex-direction: column;
