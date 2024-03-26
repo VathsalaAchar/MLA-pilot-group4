@@ -20,9 +20,20 @@ const Statistics = ({ currentUser }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGraphQLData = async () => {
       try {
-        const response = await axios.get(`${config.apiUrl}/stats/${currentUser}`);
+        const payload = {
+          query: `
+          {
+            stats: statsByUsername(username: "${currentUser}") { 
+              exercises { 
+                exerciseType 
+                totalDuration 
+              }
+            }
+          }`
+        };
+        const response = await axios.post(`${config.apiUrl}/stats/graphql`, payload);
         setExercisesData(response.data.stats[0].exercises);
         setLoading(false);
       } catch (error) {
@@ -31,7 +42,7 @@ const Statistics = ({ currentUser }) => {
       }
     };
 
-    fetchData();
+    fetchGraphQLData();
   }, [currentUser]);
 
   const renderActiveShape = (props, data, dataType) => {
