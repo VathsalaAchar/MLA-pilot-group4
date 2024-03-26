@@ -1,9 +1,12 @@
 from ariadne import gql, make_executable_schema, QueryType
 from core.models import mongo
+from core.query import stats_query, stats_by_username_query
+
 
 type_defs = gql("""
     type Query {
         stats: [Stats]
+        statsByUsername(username: String): [Stats]
     }
 
     type Stats {
@@ -33,43 +36,15 @@ query = QueryType()
 
 @query.field("stats")
 def stats_resolver(*_):
-    pipeline = [
-        {
-            "$group": {
-                "_id": {
-                    "username": "$username",
-                    "exerciseType": "$exerciseType"
-                },
-                "totalDuration": {"$sum": "$duration"},
-                "totalDistance": {"$sum": "$distance"},
-                "averagePace": {"$avg": "$pace"},
-                "averageSpeed": {"$avg": "$speed"},
-                "topSpeed": {"$max": "$speed"}
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id.username",
-                "exercises": {
-                    "$push": {
-                        "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration",
-                        "totalDistance": "$totalDistance",
-                        "averagePace": "$averagePace",
-                        "averageSpeed": "$averageSpeed",
-                        "topSpeed": "$topSpeed"
-                    }
-                }
-            }
-        },
-        {
-            "$project": {
-                "username": "$_id",
-                "exercises": 1,
-                "_id": 0
-            }
-        }
-    ]
+    pipeline = stats_query()
+
+    stats = list(mongo.db.exercises.aggregate(pipeline))
+    return stats
+
+
+@query.field("statsByUsername")
+def stats_by_username_resolver(*_, username=None):
+    pipeline = stats_by_username_query(username)
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return stats
