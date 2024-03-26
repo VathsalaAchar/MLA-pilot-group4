@@ -2,6 +2,7 @@ from flask import Flask
 from core.views import stats_page
 from core.models import mongo
 from flask_cors import CORS
+from prometheus_flask_exporter import PrometheusMetrics
 
 
 def create_app(config):
@@ -11,8 +12,11 @@ def create_app(config):
 
     mongo.init_app(app)
 
+    metrics = PrometheusMetrics(app)
+
     CORS(app, resources={r"/*": {"origins": "*"}},
          methods="GET,HEAD,POST,OPTIONS,PUT,PATCH,DELETE")
     app.register_blueprint(stats_page)
+    metrics.info('app_info', 'Application Info', version='1.2')
 
     return app
