@@ -29,6 +29,10 @@ const Statistics = ({ currentUser }) => {
               exercises { 
                 exerciseType 
                 totalDuration 
+                totalDistance
+                averagePace
+                averageSpeed
+                topSpeed
               }
             }
           }`
