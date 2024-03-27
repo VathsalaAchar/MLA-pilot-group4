@@ -4,7 +4,6 @@ const { app, server } = require('../server');
 require("dotenv").config;
 
 const username = "testuser"
-
 const today = new Date()
 
 const exerciseToAdd = {
@@ -82,11 +81,7 @@ describe("PUT /exercises/update/:id", () => {
 });
 
 describe("DELETE /exercises/:id", () => {
-    afterAll(() => {
-        server.close();
-    });
-
-    test("should delete an exercise for give id", async () => {
+    test("should delete an exercise for given id", async () => {
         return request(app)
             .delete(`/exercises/${exerciseId}`)
             .expect(200)
