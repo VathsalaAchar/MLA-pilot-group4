@@ -110,7 +110,7 @@ const Statistics = ({ currentUser }) => {
           <ResponsiveContainer width="50%" height={400}>
             <PieChart>
               <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
-                Total Duration for Exercises 
+                Total Duration for Exercises
               </text>
               <Pie
                 activeIndex={activeDurationIndex}
@@ -179,7 +179,7 @@ const Statistics = ({ currentUser }) => {
                   </div>
                   <Group mt="lg" >
                     <div >
-                      <MText className='label'>{entry.averagePace !== null ?
+                      <MText className='label'>{entry.averagePace != null ?
                         <span>{entry.averagePace.toFixed(2)} <span className="unit">min/km</span></span>
                         : 'N/A'}
                       </MText>
@@ -188,7 +188,7 @@ const Statistics = ({ currentUser }) => {
                       </MText>
                     </div>
                     <div className="average-speed">
-                      <MText className='label'>{entry.averageSpeed !== null ?
+                      <MText className='label'>{entry.averageSpeed != null ?
                         <span>{entry.averageSpeed.toFixed(2)} <span className="unit">km/hr</span></span>
                         : 'N/A'}
                       </MText>
