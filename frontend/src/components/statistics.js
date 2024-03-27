@@ -3,18 +3,20 @@ import axios from 'axios';
 import './statistics.css';
 import { PieChart, Pie, ResponsiveContainer, Sector, Cell, Text } from 'recharts'; // Import Text component
 import config from '../config';
+import { Text as MText, Card, Group } from '@mantine/core';
 
 const iconMap = {
   Running: '#882255',
-  Cycling: '#785EF0',
+  Cycling: '#024059',
   Gym: '#4B0092',
   Swimming: '#0072B2',
-  Other: '#117733'
+  Other: '#112D6E'
 };
 
 const Statistics = ({ currentUser }) => {
   const [exercisesData, setExercisesData] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeDurationIndex, setActiveDurationIndex] = useState(0);
+  const [activeDistanceIndex, setActiveDistanceIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const Statistics = ({ currentUser }) => {
     fetchData();
   }, [currentUser]);
 
-  const renderActiveShape = (props, data) => {
+  const renderActiveShape = (props, data, dataType) => {
     const RADIAN = Math.PI / 180;
     const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
     const sin = Math.sin(-RADIAN * midAngle);
@@ -44,6 +46,7 @@ const Statistics = ({ currentUser }) => {
     const ex = mx + (cos >= 0 ? 1 : -1) * 22;
     const ey = my;
     const textAnchor = cos >= 0 ? 'start' : 'end';
+    const labelText = dataType === 'duration' ? `${value} min` : `${value} km`;
 
     return (
       <g>
@@ -70,47 +73,126 @@ const Statistics = ({ currentUser }) => {
         />
         <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333" width={50} style={{ overflow: 'visible' }}>
-          {` Duration: ${value} min`}
+        <Text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333" width={80} style={{ overflow: 'visible' }}>
+          {labelText}
         </Text>
       </g>
     );
   };
 
-  const onPieEnter = (_, index) => {
-    setActiveIndex(index);
+  const onDurationPieEnter = (_, index) => {
+    setActiveDurationIndex(index);
+  };
+
+  const onDistancePieEnter = (_, index) => {
+    setActiveDistanceIndex(index);
   };
 
   return (
     <div className="stats-container">
       <h4>Well done, {currentUser}! This is your overall effort:</h4>
-      <hr/>
+      <hr />
       {loading ? (
         <p>Loading...</p>
       ) : exercisesData.length > 0 ? (
-        <ResponsiveContainer width="100%" height={400}>
-          <PieChart>
-            <Pie
-              activeIndex={activeIndex}
-              activeShape={(props) => renderActiveShape(props, exercisesData)}
-              data={exercisesData}
-              cx="50%"
-              cy="50%"
-              innerRadius={70}
-              outerRadius={125}
-              fill="#8884d8"
-              dataKey="totalDuration"
-              onMouseEnter={onPieEnter}
-            >
-              {exercisesData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={iconMap[entry.exerciseType]} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
+        <div className="charts-container">
+          <ResponsiveContainer width="50%" height={400}>
+            <PieChart>
+              <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
+                Total Duration for Exercises 
+              </text>
+              <Pie
+                activeIndex={activeDurationIndex}
+                activeShape={(props) => renderActiveShape(props, exercisesData, 'duration')}
+                data={exercisesData}
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={125}
+                fill="#8884d8"
+                dataKey="totalDuration"
+                onMouseEnter={onDurationPieEnter}
+              >
+                {exercisesData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={iconMap[entry.exerciseType]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="50%" height={400}>
+            <PieChart>
+              <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
+                Total Distance for Exercises
+              </text>
+              <Pie
+                activeIndex={activeDistanceIndex}
+                activeShape={(props) => renderActiveShape(props, exercisesData, 'distance')}
+                data={exercisesData}
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={125}
+                fill="#82ca9d"
+                dataKey="totalDistance"
+                onMouseEnter={onDistancePieEnter}
+              >
+                {exercisesData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={iconMap[entry.exerciseType]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       ) : (
-        <p>No data available</p>
+        <p className="no-data-message">No data available</p>
       )}
+      <div className="card-container">
+        {exercisesData.map((entry, index) => (
+          // Render card for Running, Cycling, and Swimming exercises only for now
+          entry.exerciseType === "Running" || entry.exerciseType === "Cycling" || entry.exerciseType === "Swimming" ? (
+            <Card key={index} shadow='md' p="xl" radius="md" className='card'>
+              <div className='inner'>
+                <div>
+                  <MText fz="xl" className='label'>
+                    {entry.exerciseType}
+                  </MText>
+                  <div>
+                    <MText className='lead' mt={30}>
+                      {entry.topSpeed !== null ?
+                        <span>{entry.topSpeed} <span className="unit">km/hr</span></span>
+                        : 'N/A'}
+                    </MText>
+                    <MText fz="xs" c="dimmed">
+                      Top Speed
+                    </MText>
+                  </div>
+                  <Group mt="lg" >
+                    <div >
+                      <MText className='label'>{entry.averagePace !== null ?
+                        <span>{entry.averagePace.toFixed(2)} <span className="unit">min/km</span></span>
+                        : 'N/A'}
+                      </MText>
+                      <MText size="xs" c="dimmed">
+                        Average Pace
+                      </MText>
+                    </div>
+                    <div className="average-speed">
+                      <MText className='label'>{entry.averageSpeed !== null ?
+                        <span>{entry.averageSpeed.toFixed(2)} <span className="unit">km/hr</span></span>
+                        : 'N/A'}
+                      </MText>
+                      <MText size="xs" c="dimmed">
+                        Average Speed
+                      </MText>
+                    </div>
+                  </Group>
+                </div>
+              </div>
+
+            </Card>
+          ) : null
+        ))}
+      </div>
     </div>
   );
 };

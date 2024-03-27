@@ -1,8 +1,7 @@
 from flask import current_app as app
 from core.gql_schema import schema
 from core.models import mongo
-from flask import Blueprint
-from flask import jsonify, request
+from flask import Blueprint, jsonify, request
 from bson import json_util
 import traceback
 import logging
@@ -13,13 +12,11 @@ from ariadne import graphql_sync
 
 stats_page = Blueprint('stats_page', __name__)
 
-
 @stats_page.route('/')
 def index():
     exercises = mongo.db.exercises.find()
     exercises_list = list(exercises)
     return json_util.dumps(exercises_list)
-
 
 @stats_page.route('/stats')
 def stats():
@@ -30,7 +27,11 @@ def stats():
                     "username": "$username",
                     "exerciseType": "$exerciseType"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalDistance": {"$sum": "$distance"},
+                "averagePace": {"$avg": "$pace"},
+                "averageSpeed": {"$avg": "$speed"},
+                "topSpeed": {"$max": "$speed"}
             }
         },
         {
@@ -39,7 +40,11 @@ def stats():
                 "exercises": {
                     "$push": {
                         "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration"
+                        "totalDuration": "$totalDuration",
+                        "totalDistance": "$totalDistance",
+                        "averagePace": "$averagePace",
+                        "averageSpeed": "$averageSpeed",
+                        "topSpeed": "$topSpeed"
                     }
                 }
             }
@@ -55,7 +60,6 @@ def stats():
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)
-
 
 @stats_page.route('/stats/<username>', methods=['GET'])
 def user_stats(username):
@@ -69,7 +73,11 @@ def user_stats(username):
                     "username": "$username",
                     "exerciseType": "$exerciseType"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalDistance": {"$sum": "$distance"},
+                "averagePace": {"$avg": "$pace"},
+                "averageSpeed": {"$avg": "$speed"},
+                "topSpeed": {"$max": "$speed"}
             }
         },
         {
@@ -78,7 +86,11 @@ def user_stats(username):
                 "exercises": {
                     "$push": {
                         "exerciseType": "$_id.exerciseType",
-                        "totalDuration": "$totalDuration"
+                        "totalDuration": "$totalDuration",
+                        "totalDistance": "$totalDistance",
+                        "averagePace": "$averagePace",
+                        "averageSpeed": "$averageSpeed",
+                        "topSpeed": "$topSpeed"
                     }
                 }
             }
@@ -94,7 +106,6 @@ def user_stats(username):
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return jsonify(stats=stats)
-
 
 @stats_page.route('/stats/weekly/', methods=['GET'])
 def weekly_user_stats():
@@ -130,13 +141,21 @@ def weekly_user_stats():
                 "_id": {
                     "exerciseType": "$exerciseType"
                 },
-                "totalDuration": {"$sum": "$duration"}
+                "totalDuration": {"$sum": "$duration"},
+                "totalDistance": {"$sum": "$distance"},
+                "averagePace": {"$avg": "$pace"},
+                "averageSpeed": {"$avg": "$speed"},
+                "topSpeed": {"$max": "$speed"}
             }
         },
         {
             "$project": {
                 "exerciseType": "$_id.exerciseType",
                 "totalDuration": 1,
+                "totalDistance": 1,
+                "averagePace": 1,
+                "averageSpeed": 1,
+                "topSpeed": 1,
                 "_id": 0
             }
         }
@@ -151,14 +170,11 @@ def weekly_user_stats():
         traceback.print_exc()
         return jsonify(error="An internal error occurred"), 500
 
-
 explorer_html = ExplorerGraphiQL().html(None)
-
 
 @stats_page.route('/stats/graphql', methods=["GET"])
 def graphql_explorer():
     return explorer_html, 200
-
 
 @stats_page.route("/stats/graphql", methods=["POST"])
 def graphql_server():
