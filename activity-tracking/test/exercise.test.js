@@ -25,6 +25,8 @@ const exerciseToUpdate = {
     date: today
 }
 
+let exerciseId = " "
+
 afterAll(async () => {
     await server.close()
     await mongoose.connection.close()
@@ -42,7 +44,6 @@ describe("GET /exercises/", () => {
     });
 });
 
-let exerciseId = " "
 describe("POST /exercises/add", () => {
     test("should create a new exercise", async () => {
         return request(app)

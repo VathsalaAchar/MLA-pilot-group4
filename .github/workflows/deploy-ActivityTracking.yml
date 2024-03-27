@@ -34,15 +34,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
 
       # Setting up CI pipeline to run npm tests
-      - name: Run npm test
+      - name: Set up node environment for test
         uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - run: |
+
+      - name: Run npm tests
+        run: |
           cd activity-tracking
           npm ci
           npm run test
