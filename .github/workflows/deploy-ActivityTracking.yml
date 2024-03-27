@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      # Temporarily running this pipeline for this branch
-      - activity-tracking-tests
     paths:
       - "activity-tracking/**"
   pull_request:
