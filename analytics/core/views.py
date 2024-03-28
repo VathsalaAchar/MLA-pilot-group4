@@ -72,7 +72,7 @@ def graphql_server():
     success, result = graphql_sync(
         schema, data, context_value={"request": request}, debug=app.debug
     )
-    # app.logger.info('%s data returned:', result)
+    app.logger.info(f'data returned: {result}')
     if success:
         data = result['data']
         status_code = 200
