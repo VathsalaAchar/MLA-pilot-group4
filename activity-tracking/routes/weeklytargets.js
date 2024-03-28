@@ -34,7 +34,6 @@ router.post('/add', async (req, res) => {
             otherTarget,
             weekStartDate
         });
-
         const savedWeeklyTarget = await newWeeklyTarget.save();
         return res.status(201).json(savedWeeklyTarget);
 
@@ -68,6 +67,20 @@ router.patch('/update', async (req, res) => {
         } else {
             return res.status(404).json({ error: 'Weekly target not found for update. Create a new one instead.' });
         }
+    } catch (error) {
+        res.status(400).json({ error: 'Error: ' + error.message });
+    }
+});
+
+// DELETE: Delete an exercise by ID
+router.delete('/:id', async (req, res) => {
+    try {
+        const deletedTargets = await WeeklyTarget.findByIdAndDelete(req.params.id);
+        if (!deletedTargets) {
+            res.status(404).json({ error: 'Weekly target not found' });
+            return;
+        }
+        res.json({ message: 'Weekly Target deleted.' });
     } catch (error) {
         res.status(400).json({ error: 'Error: ' + error.message });
     }

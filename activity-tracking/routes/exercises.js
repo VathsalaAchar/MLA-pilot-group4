@@ -41,7 +41,7 @@ router.post('/add', async (req, res) => {
     });
 
     await newExercise.save();
-    res.json({ message: 'Exercise added!' });
+    res.json({ message: 'Exercise added!', data: newExercise });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: 'Error: ' + error.message });

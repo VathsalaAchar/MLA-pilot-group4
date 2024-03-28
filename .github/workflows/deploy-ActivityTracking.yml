@@ -15,9 +15,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: cfgmla23
+        options: >-
+          --health-cmd "echo 'db.runCommand("ping").ok' | mongosh --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name mongo_container
+        ports:
+          - 27017:27017   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      # Setting up CI pipeline to run npm tests
+      - name: Set up node environment for test
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Run npm tests
+        run: |
+          cd activity-tracking
+          npm ci
+          npm run test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
