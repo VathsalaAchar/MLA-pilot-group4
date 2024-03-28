@@ -10,21 +10,20 @@ const exerciseSchema = new Schema(
       enum: ['Running', 'Cycling', 'Swimming', 'Gym', 'Other']
     },
     description: { type: String, required: false },
-    duration: { 
-        type: Number, 
-        required: true,
-        validate: {
-            validator: Number.isInteger,
-            message: 'Duration should be an integer.'
-        },
-        min: [1, 'Duration should be positive.']
+    duration: {
+      type: Number,
+      required: true,
+      validate: {
+        validator: Number.isInteger,
+        message: 'Duration should be an integer.'
+      },
+      min: [1, 'Duration should be positive.']
     },
-    distance: { 
-      type: Number, 
+    distance: {
+      type: Number,
       required: false,
       min: [0, 'Distance should be positive.']
     },
-    distance: { type: Number, required: false },
     speed: { type: Number, required: false },
     pace: { type: Number, required: false },
     date: { type: Date, required: true },
