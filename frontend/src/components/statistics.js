@@ -24,7 +24,7 @@ const Statistics = ({ currentUser }) => {
       try {
         const payload = {
           query: `
-          {
+          query OverallStatistics {
             stats: statsByUsername(username: "${currentUser}") { 
               exercises { 
                 exerciseType 
