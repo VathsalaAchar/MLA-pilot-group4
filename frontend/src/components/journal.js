@@ -216,8 +216,8 @@ const Journal = ({ currentUser }) => {
                   value={updatedTargets[exerciseType] || ''}
                   onChange={(event) => {
                     const inputValue = event.target.value.trim();
-                    const value = inputValue == '' ? '' : parseInt(inputValue, 10);
-                    if (inputValue == '' || (!isNaN(value) && value >= 0)) {
+                    const value = inputValue === '' ? '' : parseInt(inputValue, 10);
+                    if (inputValue === '' || (!isNaN(value) && value >= 0)) {
                       setUpdatedTargets(prevState => ({ ...prevState, [exerciseType]: value }));
                     }
                   }}
