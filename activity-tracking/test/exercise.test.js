@@ -12,6 +12,8 @@ const exerciseToAdd = {
     description: " ",
     duration: 100,
     distance: 10,
+    speed: 6.66,
+    pace: 10,
     date: today
 }
 
@@ -21,6 +23,8 @@ const exerciseToUpdate = {
     description: " ",
     duration: 15,
     distance: 1.5,
+    speed: 6.66,
+    pace: 10,
     date: today
 }
 
