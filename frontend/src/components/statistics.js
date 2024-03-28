@@ -20,9 +20,24 @@ const Statistics = ({ currentUser }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGraphQLData = async () => {
       try {
-        const response = await axios.get(`${config.apiUrl}/stats/${currentUser}`);
+        const payload = {
+          query: `
+          {
+            stats: statsByUsername(username: "${currentUser}") { 
+              exercises { 
+                exerciseType 
+                totalDuration 
+                totalDistance
+                averagePace
+                averageSpeed
+                topSpeed
+              }
+            }
+          }`
+        };
+        const response = await axios.post(`${config.apiUrl}/stats/graphql`, payload);
         setExercisesData(response.data.stats[0].exercises);
         setLoading(false);
       } catch (error) {
@@ -31,7 +46,7 @@ const Statistics = ({ currentUser }) => {
       }
     };
 
-    fetchData();
+    fetchGraphQLData();
   }, [currentUser]);
 
   const renderActiveShape = (props, data, dataType) => {
@@ -99,7 +114,7 @@ const Statistics = ({ currentUser }) => {
           <ResponsiveContainer width="50%" height={400}>
             <PieChart>
               <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
-                Total Duration for Exercises 
+                Total Duration for Exercises
               </text>
               <Pie
                 activeIndex={activeDurationIndex}
@@ -168,7 +183,7 @@ const Statistics = ({ currentUser }) => {
                   </div>
                   <Group mt="lg" >
                     <div >
-                      <MText className='label'>{entry.averagePace !== null ?
+                      <MText className='label'>{entry.averagePace != null ?
                         <span>{entry.averagePace.toFixed(2)} <span className="unit">min/km</span></span>
                         : 'N/A'}
                       </MText>
@@ -177,7 +192,7 @@ const Statistics = ({ currentUser }) => {
                       </MText>
                     </div>
                     <div className="average-speed">
-                      <MText className='label'>{entry.averageSpeed !== null ?
+                      <MText className='label'>{entry.averageSpeed != null ?
                         <span>{entry.averageSpeed.toFixed(2)} <span className="unit">km/hr</span></span>
                         : 'N/A'}
                       </MText>

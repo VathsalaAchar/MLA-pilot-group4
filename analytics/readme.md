@@ -13,7 +13,7 @@ This is the Analytics microservice for the MLA Fitness tracker app.
 
 ```sh
 cd analytics
-flask run -h localhost -p 5050
+python3 run.py
 ```
 
 #### spin up MongoDB without docker-compose:
