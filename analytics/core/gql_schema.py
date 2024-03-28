@@ -17,7 +17,7 @@ type_defs = gql("""
     type Exercise {
         exerciseType: ExerciseType!
         totalDuration: Int!
-        totalDistance: Int
+        totalDistance: Float
         averagePace: Float
         averageSpeed: Float
         topSpeed: Float
