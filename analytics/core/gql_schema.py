@@ -1,12 +1,12 @@
 from ariadne import gql, make_executable_schema, QueryType
 from core.models import mongo
-from core.query import stats_query, stats_by_username_query
-
+from core.query import stats_query, stats_by_username_query, stats_by_week_start_end_dates_query
 
 type_defs = gql("""
     type Query {
         stats: [Stats]
         statsByUsername(username: String): [Stats]
+        statsAggregatedByWeek(username:String, startdate: String, enddate: String): [Exercise]
     }
 
     type Stats {
@@ -30,9 +30,11 @@ type_defs = gql("""
         Gym
         Other
     }
+    
 """)
 
 query = QueryType()
+
 
 @query.field("stats")
 def stats_resolver(*_):
@@ -48,5 +50,18 @@ def stats_by_username_resolver(*_, username=None):
 
     stats = list(mongo.db.exercises.aggregate(pipeline))
     return stats
+
+
+@query.field("statsAggregatedByWeek")
+def stats_by_week_start_end_dates_resolver(*_, username=None, startdate=None, enddate=None):
+    pipeline = stats_by_week_start_end_dates_query(
+        username=username,
+        start_date=startdate,
+        end_date=enddate
+    )
+
+    stats = list(mongo.db.exercises.aggregate(pipeline))
+    return stats
+
 
 schema = make_executable_schema(type_defs, query)
