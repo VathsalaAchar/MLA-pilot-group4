@@ -5,26 +5,31 @@ require("dotenv").config;
 
 const username = "testuser"
 const today = new Date()
+let distance = 100
+let duration = 10
 
 const exerciseToAdd = {
     username: username,
     exerciseType: "Running",
     description: " ",
-    duration: 100,
-    distance: 10,
-    speed: 6.66,
-    pace: 10,
+    duration: duration,
+    distance: distance,
+    speed: distance * 60 / distance,
+    pace: duration/distance,
     date: today
 }
+
+distance = 1.5
+duration = 10
 
 const exerciseToUpdate = {
     username: username,
     exerciseType: "Running",
     description: " ",
-    duration: 15,
-    distance: 1.5,
-    speed: 6.66,
-    pace: 10,
+    duration: duration,
+    distance: distance,
+    speed: distance * 60 / distance,
+    pace: duration / distance,
     date: today
 }
 
@@ -57,6 +62,8 @@ describe("POST /exercises/add", () => {
                 exerciseId = body.data._id
                 expect(body.data.duration).toBe(exerciseToAdd.duration)
                 expect(body.data.distance).toBe(exerciseToAdd.distance)
+                expect(body.data.speed).toBe(exerciseToAdd.speed)
+                expect(body.data.pace).toBe(exerciseToAdd.pace)
             })
     });
 });
@@ -80,6 +87,8 @@ describe("PUT /exercises/update/:id", () => {
                 expect(body.exercise._id).toBe(exerciseId)
                 expect(body.exercise.duration).toBe(exerciseToUpdate.duration)
                 expect(body.exercise.distance).toBe(exerciseToUpdate.distance)
+                expect(body.exercise.speed).toBe(exerciseToUpdate.speed)
+                expect(body.exercise.pace).toBe(exerciseToUpdate.pace)
             })
     });
 });
