@@ -12,11 +12,13 @@ def create_app(config):
 
     mongo.init_app(app)
 
-    metrics = PrometheusMetrics(app)
+    if not app.testing:
+        # collect metrics when not in testing
+        metrics = PrometheusMetrics(app)
+        metrics.info('app_info', 'Application Info', version='1.2')
 
     CORS(app, resources={r"/*": {"origins": "*"}},
          methods="GET,HEAD,POST,OPTIONS,PUT,PATCH,DELETE")
     app.register_blueprint(stats_page)
-    metrics.info('app_info', 'Application Info', version='1.2')
 
     return app
