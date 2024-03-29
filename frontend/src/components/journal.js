@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, RingProgress, Text, Center, Modal, TextInput, Tooltip } from '@mantine/core';
+import { Grid, Card, RingProgress, Text, Center, Modal, TextInput, Tooltip, Badge, Group } from '@mantine/core';
 import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon } from '@tabler/icons-react';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
@@ -9,11 +9,12 @@ import config from '../config';
 
 const iconMap = {
   Running: { icon: IconRun, color: '#882255' },
-  Cycling: { icon: IconBike, color: '#785EF0' },
+  Cycling: { icon: IconBike, color: '#024059' },
   Gym: { icon: IconBarbell, color: '#4B0092' },
   Swimming: { icon: IconSwimming, color: '#0072B2' },
-  Other: { icon: IconHelpOctagon, color: '#117733' }
+  Other: { icon: IconHelpOctagon, color: '#112D6E' }
 };
+
 
 const Journal = ({ currentUser }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week'));
@@ -22,7 +23,10 @@ const Journal = ({ currentUser }) => {
   const [updatedTargets, setUpdatedTargets] = useState({});
   const [exercises, setExercises] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState('');
   const [isCurrentWeek, setIsCurrentWeek] = useState(true);
+  const [showDetailedStats, setShowDetailedStats] = useState(false);
+  const [detailedStatsExercise, setDetailedStatsExercise] = useState(null);
 
   const fetchGraphQLExercises = async () => {
     try {
@@ -137,8 +141,21 @@ const Journal = ({ currentUser }) => {
     }
   };
 
+
   const handleCloseModal = () => {
     setShowEditModal(false);
+  };
+  const handleShowDetailedStats = (exerciseType) => {
+    setShowDetailedStats(true);
+    setSelectedExercise(exerciseType);
+    const exercise = exercises.find((exercise) => exercise.exerciseType === exerciseType);
+    setDetailedStatsExercise(exercise);
+  };
+
+  const handleCloseDetailedStats = () => {
+    setShowDetailedStats(false);
+    setSelectedExercise('');
+    setDetailedStatsExercise(null);
   };
 
   const handleSaveTargets = async () => {
@@ -189,6 +206,164 @@ const Journal = ({ currentUser }) => {
       setUpdatedTargets({});
     } catch (error) {
       console.error('Error saving targets:', error);
+    }
+  };
+  
+  const sortedExercises = exercises.sort((a, b) => {
+    const order = ['Running', 'Swimming', 'Cycling', 'Gym', 'Other'];
+    return order.indexOf(a.exerciseType) - order.indexOf(b.exerciseType);
+  });
+
+  const getLabelVariant = (exerciseType) => {
+    switch (exerciseType) {
+      case 'Running':
+        return { from: '#882255', to: 'rgba(46, 46, 46, 0.68)', deg: 158 };
+      case 'Swimming':
+        return { from: '#0072B2', to: 'rgba(46, 46, 46, 0.68)', deg: 158 };
+      case 'Cycling':
+        return { from: '#024059', to: 'rgba(46, 46, 46, 0.68)', deg: 158 };
+      default:
+        return undefined;
+    }
+  };
+
+  const renderCardContent = (exercise) => {
+    if (showDetailedStats && selectedExercise === exercise.exerciseType && detailedStatsExercise) {
+      return (
+        <div>
+          <Card padding="xl" radius="md" className='card'>
+            <Grid justify="space-between" align="flex-start">
+              <Grid.Col span={6}>
+                <div>
+                  <Text className='label' variant="gradient" gradient={getLabelVariant(exercise.exerciseType)}>
+                    {exercise.totalDistance !== null ? (
+                      <>
+                        {exercise.totalDistance.toFixed(1)}
+                        <Text size="xs" c="dimmed" span>
+                          {' km'}
+                        </Text>
+                      </>
+                    ) : (
+                      'N/A'
+                    )}
+                  </Text>
+                  <Text size="xs" c="dimmed" inline>
+                    Total Distance
+                  </Text>
+                </div>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <div>
+                  <Text className='label' variant="gradient" gradient={getLabelVariant(exercise.exerciseType)}>
+                    {exercise.topSpeed !== null ? (
+                      <>
+                        {exercise.topSpeed.toFixed(1)}
+                        <Text size="xs" c="dimmed" span>
+                          {' km/hr'}
+                        </Text>
+                      </>
+                    ) : (
+                      'N/A'
+                    )}
+                  </Text>
+                  <Text size="xs" c="dimmed" inline>
+                    Top Speed
+                  </Text>
+                </div>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <div>
+                  <Text className='label' variant="gradient" gradient={getLabelVariant(exercise.exerciseType)}>
+                    {exercise.averagePace !== null ? (
+                      <>
+                        {exercise.averagePace.toFixed(1)}
+                        <Text size="xs" c="dimmed" span>
+                          {' min/km'}
+                        </Text>
+                      </>
+                    ) : (
+                      'N/A'
+                    )}
+                  </Text>
+                  <Text size="xs" c="dimmed" inline>
+                    Average Pace
+                  </Text>
+                </div>
+
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <div>
+                  <Text className='label' variant="gradient" gradient={getLabelVariant(exercise.exerciseType)}>
+                    {exercise.averageSpeed !== null ? (
+                      <>
+                        {exercise.averageSpeed.toFixed(1)}
+                        <Text size="xs" c="dimmed" span>
+                          {' km/hr'}
+                        </Text>
+                      </>
+                    ) : (
+                      'N/A'
+                    )}
+                  </Text>
+                  <Text size="xs" c="dimmed" inline>
+                    Average Speed
+                  </Text>
+                </div>
+
+              </Grid.Col>
+            </Grid>
+          </Card>
+          {/* Button to close detailed stats */}
+          <Badge size="sm"
+            variant="light"
+            color='#D41159'
+            style={{ marginTop: 10, cursor: 'pointer' }}
+            onClick={handleCloseDetailedStats}>
+            Close All Stats
+          </Badge>
+        </div>
+      );
+    } else {
+      // Render progress ring and basic stats
+      const { icon: Icon, color } = iconMap[exercise.exerciseType];
+      const progress = (exercise.totalDuration / exerciseTargets[exercise.exerciseType]) * 100;
+      return (
+        <div>
+          {/* Progress ring */}
+          <div style={{ position: 'relative', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <RingProgress size={80} roundCaps thickness={8} sections={[{ value: progress, color }]} />
+            <Center style={{ position: 'absolute' }}>
+              <Icon size={20} style={{ zIndex: 1 }} />
+            </Center>
+          </div>
+          {/* Basic stats */}
+          <div style={{ textAlign: 'center', marginTop: 10 }}>
+            <Text className="exercise-type" c="dimmed" size="xs" tt="uppercase" fw={700}>
+              {exercise.exerciseType}
+            </Text>
+            <Text className="exercise-time" fw={700} size="l">
+              {exerciseTargets[exercise.exerciseType] ? (
+                `${exercise.totalDuration} out of ${exerciseTargets[exercise.exerciseType]} mins ${exercise.totalDuration >= exerciseTargets[exercise.exerciseType] ? '🎉' : ''
+                }`
+              ) : (
+                `${exercise.totalDuration} mins`
+              )}
+            </Text>
+            {/* Button to show detailed stats */}
+            {['Running', 'Swimming', 'Cycling'].includes(exercise.exerciseType) && (
+              <Badge
+                size="sm"
+                variant="light"
+                color='#006CD1'
+                style={{ marginTop: 10, cursor: 'pointer' }}
+                onClick={() => handleShowDetailedStats(exercise.exerciseType)}
+              >
+                Show All Stats
+              </Badge>
+            )}
+          </div>
+        </div>
+      );
     }
   };
 
@@ -243,34 +418,13 @@ const Journal = ({ currentUser }) => {
       )}
 
       <Grid gutter="md" justify="center">
-        {exercises.map((exercise, index) => {
-          const { icon: Icon, color } = iconMap[exercise.exerciseType];
-          const progress = (exercise.totalDuration / exerciseTargets[exercise.exerciseType]) * 100;
-          return (
-            <Grid.Col key={exercise.id} span={{ xs: 12, sm: 6, md: 4 }}>
-              <Card shadow="xs" className="mantine-card">
-                <div style={{ position: 'relative', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <RingProgress size={80} roundCaps thickness={8} sections={[{ value: progress, color }]} />
-                  <Center style={{ position: 'absolute' }}>
-                    <Icon size={20} style={{ zIndex: 1 }} />
-                  </Center>
-                </div>
-                <div style={{ textAlign: 'center', marginTop: 10 }}>
-                  <Text className="exercise-type" c="dimmed" size="xs" tt="uppercase" fw={700}>
-                    {exercise.exerciseType}
-                  </Text>
-                  <Text className="exercise-time" fw={700} size="l">
-                    {exerciseTargets[exercise.exerciseType] ? (
-                      `${exercise.totalDuration} out of ${exerciseTargets[exercise.exerciseType]} mins`
-                    ) : (
-                      `${exercise.totalDuration} mins`
-                    )}
-                  </Text>
-                </div>
-              </Card>
-            </Grid.Col>
-          );
-        })}
+        {sortedExercises.map((exercise, index) => (
+          <Grid.Col key={index} span={{ xs: 12, sm: 6, md: 4 }}>
+            <Card shadow="xs" className="mantine-card">
+              {renderCardContent(exercise)}
+            </Card>
+          </Grid.Col>
+        ))}
       </Grid>
     </div>
   );
