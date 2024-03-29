@@ -24,13 +24,29 @@ const Journal = ({ currentUser }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [isCurrentWeek, setIsCurrentWeek] = useState(true);
 
-  const fetchExercises = async () => {
+  const fetchGraphQLExercises = async () => {
     try {
-      const url = `${config.apiUrl}/stats/weekly/?user=${currentUser}&start=${moment(startDate).format('YYYY-MM-DD')}&end=${moment(endDate).format('YYYY-MM-DD')}`;
-      const response = await axios.get(url);
+      const payload = {
+        query: `
+        query WeeklyExerciseStats {
+          stats: statsAggregatedByWeek(
+            username: "${currentUser}"
+            startdate: "${moment(startDate).format('YYYY-MM-DD')}"
+            enddate: "${moment(endDate).format('YYYY-MM-DD')}"
+          ) {
+            exerciseType
+            totalDuration
+            totalDistance
+            averagePace
+            averageSpeed
+            topSpeed
+          }
+        }`
+      };
+      const response = await axios.post(`${config.apiUrl}/stats/graphql`, payload);
       console.log('API Response:', response.data);
-      if (response.data.stats && Array.isArray(response.data.stats)) {
-        const sortedExercises = response.data.stats.sort((a, b) => a.id - b.id);
+      if (response.data.data.stats && Array.isArray(response.data.data.stats)) {
+        const sortedExercises = response.data.data.stats.sort((a, b) => a.id - b.id);
         setExercises(sortedExercises);
       } else {
         console.error('Unexpected response structure:', response.data);
@@ -46,10 +62,9 @@ const Journal = ({ currentUser }) => {
       console.error('Failed to fetch exercises', error);
     }
   };
-  
 
   useEffect(() => {
-    fetchExercises();
+    fetchGraphQLExercises();
   }, [currentUser, startDate, endDate]);
 
   const fetchWeeklyTargets = async () => {
@@ -121,7 +136,7 @@ const Journal = ({ currentUser }) => {
       console.error('Error fetching weekly targets:', error);
     }
   };
-  
+
   const handleCloseModal = () => {
     setShowEditModal(false);
   };
@@ -148,7 +163,7 @@ const Journal = ({ currentUser }) => {
         });
         if (response.status === 201) {
           setExerciseTargets(updatedTargets);
-          fetchExercises();
+          fetchGraphQLExercises();
         } else {
           console.error('Failed to save targets:', response.statusText);
         }
@@ -163,24 +178,24 @@ const Journal = ({ currentUser }) => {
           weekStartDate: startDate.toDate()
         });
         if (response.status === 200) {
-          setExerciseTargets(updatedTargets); 
-          fetchExercises();
+          setExerciseTargets(updatedTargets);
+          fetchGraphQLExercises();
         } else {
           console.error('Failed to update targets:', response.statusText);
         }
       }
-      
-      setShowEditModal(false); 
+
+      setShowEditModal(false);
       setUpdatedTargets({});
     } catch (error) {
       console.error('Error saving targets:', error);
     }
-  };    
+  };
 
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
-      <hr/>
+      <hr />
       <div className="date-range">
         <Button className="button-small" onClick={goToPreviousWeek}>&larr; Previous</Button>
         <span>{startDate.format('MMM DD, YYYY')} - {endDate.format('MMM DD, YYYY')}</span>
