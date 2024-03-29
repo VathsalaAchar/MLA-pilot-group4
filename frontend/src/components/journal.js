@@ -208,10 +208,12 @@ const Journal = ({ currentUser }) => {
       console.error('Error saving targets:', error);
     }
   };
+  
   const sortedExercises = exercises.sort((a, b) => {
     const order = ['Running', 'Swimming', 'Cycling', 'Gym', 'Other'];
     return order.indexOf(a.exerciseType) - order.indexOf(b.exerciseType);
   });
+
   const getLabelVariant = (exerciseType) => {
     switch (exerciseType) {
       case 'Running':
@@ -224,6 +226,7 @@ const Journal = ({ currentUser }) => {
         return undefined;
     }
   };
+
   const renderCardContent = (exercise) => {
     if (showDetailedStats && selectedExercise === exercise.exerciseType && detailedStatsExercise) {
       return (
@@ -287,7 +290,6 @@ const Journal = ({ currentUser }) => {
                   </Text>
                 </div>
 
-
               </Grid.Col>
               <Grid.Col span={6}>
                 <div>
@@ -311,7 +313,6 @@ const Journal = ({ currentUser }) => {
               </Grid.Col>
             </Grid>
           </Card>
-
           {/* Button to close detailed stats */}
           <Badge size="sm"
             variant="light"
@@ -365,6 +366,7 @@ const Journal = ({ currentUser }) => {
       );
     }
   };
+
   return (
     <div className="journal-container">
       <h4>Weekly Exercise Journal</h4>
