@@ -21,6 +21,7 @@ router.post('/add', async (req, res) => {
             cyclingTarget,
             swimmingTarget,
             gymTarget,
+            walkingTarget,
             otherTarget,
             weekStartDate
         } = req.body;
@@ -31,6 +32,7 @@ router.post('/add', async (req, res) => {
             cyclingTarget,
             swimmingTarget,
             gymTarget,
+            walkingTarget,
             otherTarget,
             weekStartDate
         });
@@ -51,6 +53,7 @@ router.patch('/update', async (req, res) => {
             cyclingTarget,
             swimmingTarget,
             gymTarget,
+            walkingTarget,
             otherTarget,
             weekStartDate
         } = req.body;
@@ -60,7 +63,7 @@ router.patch('/update', async (req, res) => {
         if (existingWeeklyTarget) {
             const updatedWeeklyTarget = await WeeklyTarget.findOneAndUpdate(
                 { username, weekStartDate },
-                { runningTarget, cyclingTarget, swimmingTarget, gymTarget, otherTarget },
+                { runningTarget, cyclingTarget, swimmingTarget, gymTarget, walkingTarget, otherTarget },
                 { new: true }
             );
             return res.status(200).json(updatedWeeklyTarget);

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Text, SimpleGrid, UnstyledButton, Group, useMantineTheme } from '@mantine/core';
-import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon } from '@tabler/icons-react';
+import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon, IconWalk } from '@tabler/icons-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@mantine/core/styles.css';
@@ -137,6 +137,7 @@ const TrackExercise = ({ currentUser }) => {
     { type: 'Cycling', icon: <IconBike size="2.5rem" stroke={2} />, hasDistance: true },
     { type: 'Swimming', icon: <IconSwimming size="2.5rem" stroke={2} />, hasDistance: true },
     { type: 'Gym', icon: <IconBarbell size="2.5rem" stroke={2} />, hasDistance: false },
+    { type: 'Walking', icon: <IconWalk size="2.5rem" stroke={2} />, hasDistance: true },
     { type: 'Other', icon: <IconHelpOctagon size="2.5rem" stroke={2} />, hasDistance: false },
   ];
 
