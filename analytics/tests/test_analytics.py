@@ -78,7 +78,7 @@ def test_graphql_post_request_get_usernames(client, mongo):
     )
     data = json.loads(response.data)
     assert len(data) == 1
-    assert len(data['stats']) == 9
+    assert len(data['data']['stats']) == 9
     assert response.status_code == 200
 
 
@@ -90,7 +90,7 @@ def test_graphql_post_request_get_exercises(client, mongo):
     data = json.loads(response.data)
     assert len(data) == 1
     # testing there are exercises data
-    assert len(data['stats'][0]['exercises']) >= 1
+    assert len(data['data']['stats'][0]['exercises']) >= 1
     assert response.status_code == 200
 
 
@@ -107,12 +107,12 @@ def test_graphql_post_request_get_filtered_exercises(client, mongo):
         data = json.loads(response.data)
         assert len(data) == 1
         # testing there are exercises data
-        assert len(data['stats'][0]['exercises']) >= 1
+        assert len(data['data']['stats'][0]['exercises']) >= 1
         assert response.status_code == 200
 
 
 def test_graphql_post_request_get_weekly_exercises(client, mongo):
-    start_date = datetime.strptime("2024-03-21", "%Y-%m-%d").date()
+    start_date = datetime.strptime("2024-03-24", "%Y-%m-%d").date()
     end_date = datetime.strptime("2024-03-30", "%Y-%m-%d").date()
     for i in range(1, 10):
         response = client.post(
@@ -129,5 +129,5 @@ def test_graphql_post_request_get_weekly_exercises(client, mongo):
         assert len(data) == 1
         # the following asswertion fails as data returned is an empty list
         # possibly due to dates filtering, leaving it in for fixing later
-        # assert len(data['stats'])
+        # assert len(data['data']['stats'])
         assert response.status_code == 200

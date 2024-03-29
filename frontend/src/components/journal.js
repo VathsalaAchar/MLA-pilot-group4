@@ -45,8 +45,8 @@ const Journal = ({ currentUser }) => {
       };
       const response = await axios.post(`${config.apiUrl}/stats/graphql`, payload);
       console.log('API Response:', response.data);
-      if (response.data.stats && Array.isArray(response.data.stats)) {
-        const sortedExercises = response.data.stats.sort((a, b) => a.id - b.id);
+      if (response.data.data.stats && Array.isArray(response.data.data.stats)) {
+        const sortedExercises = response.data.data.stats.sort((a, b) => a.id - b.id);
         setExercises(sortedExercises);
       } else {
         console.error('Unexpected response structure:', response.data);

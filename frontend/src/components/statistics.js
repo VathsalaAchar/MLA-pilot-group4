@@ -38,7 +38,7 @@ const Statistics = ({ currentUser }) => {
           }`
         };
         const response = await axios.post(`${config.apiUrl}/stats/graphql`, payload);
-        setExercisesData(response.data.stats[0].exercises);
+        setExercisesData(response.data.data.stats[0].exercises);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);

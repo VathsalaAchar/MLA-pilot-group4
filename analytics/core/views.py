@@ -73,10 +73,5 @@ def graphql_server():
         schema, data, context_value={"request": request}, debug=app.debug
     )
     app.logger.info(f'data returned: {result}')
-    if success:
-        data = result['data']
-        status_code = 200
-    else:
-        data = result
-        status_code = 400
-    return jsonify(data), status_code
+    status_code = 200 if success else 400
+    return jsonify(result), status_code
