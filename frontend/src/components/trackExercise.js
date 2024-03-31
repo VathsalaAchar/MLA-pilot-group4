@@ -136,8 +136,8 @@ const TrackExercise = ({ currentUser }) => {
     { type: 'Running', icon: <IconRun size="2.5rem" stroke={2} />, hasDistance: true },
     { type: 'Cycling', icon: <IconBike size="2.5rem" stroke={2} />, hasDistance: true },
     { type: 'Swimming', icon: <IconSwimming size="2.5rem" stroke={2} />, hasDistance: true },
-    { type: 'Gym', icon: <IconBarbell size="2.5rem" stroke={2} />, hasDistance: false },
     { type: 'Walking', icon: <IconWalk size="2.5rem" stroke={2} />, hasDistance: true },
+    { type: 'Gym', icon: <IconBarbell size="2.5rem" stroke={2} />, hasDistance: false },
     { type: 'Other', icon: <IconHelpOctagon size="2.5rem" stroke={2} />, hasDistance: false },
   ];
 

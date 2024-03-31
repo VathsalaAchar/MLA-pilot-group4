@@ -12,7 +12,7 @@ const iconMap = {
   Cycling: { icon: IconBike, color: '#024059' },
   Gym: { icon: IconBarbell, color: '#4B0092' },
   Swimming: { icon: IconSwimming, color: '#0072B2' },
-  Walking: { icon: IconWalk, color: '#00A86B' },
+  Walking: { icon: IconWalk, color: '#00412A' },
   Other: { icon: IconHelpOctagon, color: '#112D6E' }
 };
 
@@ -218,7 +218,7 @@ const Journal = ({ currentUser }) => {
   };
   
   const sortedExercises = exercises.sort((a, b) => {
-    const order = ['Running', 'Swimming', 'Cycling', 'Gym', 'Walking', 'Other'];
+    const order = ['Running', 'Swimming', 'Cycling', 'Walking', 'Gym', 'Other'];
     return order.indexOf(a.exerciseType) - order.indexOf(b.exerciseType);
   });
 

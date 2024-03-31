@@ -10,7 +10,7 @@ const iconMap = {
   Cycling: '#024059',
   Gym: '#4B0092',
   Swimming: '#0072B2',
-  Walking: '#00A86B',
+  Walking: '#00412A',
   Other: '#112D6E'
 };
 
