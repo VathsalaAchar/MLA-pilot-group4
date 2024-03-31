@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, Text, SimpleGrid, UnstyledButton, Group, useMantineTheme } from '@mantine/core';
+import { Card, Text, SimpleGrid, UnstyledButton, Group } from '@mantine/core';
 import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon } from '@tabler/icons-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -141,10 +141,10 @@ const TrackExercise = ({ currentUser }) => {
   ];
 
   return (
-    <div className='trackExercise-container'>
-      <h4>Track New Exercise</h4>
+    <div className='trackExercise-container' data-testid="track-exercise-container">
+      <h4 data-testid="track-exercise-heading">Track New Exercise</h4>
       <hr />
-      <Form onSubmit={onSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
+      <Form onSubmit={onSubmit} style={{ maxWidth: '600px', margin: 'auto' }} data-testid="track-exercise-form">
         <div style={{ marginBottom: '20px' }}>
           {renderExerciseGrid()}
         </div>
@@ -155,6 +155,7 @@ const TrackExercise = ({ currentUser }) => {
               selected={state.date}
               onChange={(date) => setState({ ...state, date })}
               dateFormat="yyyy/MM/dd"
+              data-testid="date-picker"
             />
           </Form.Group>
 
@@ -167,6 +168,7 @@ const TrackExercise = ({ currentUser }) => {
                   required
                   value={state.duration}
                   onChange={(e) => setState({ ...state, duration: e.target.value })}
+                  data-testid="duration-input"
                 />
               </Form.Group>
             </div>
@@ -179,6 +181,7 @@ const TrackExercise = ({ currentUser }) => {
                     required
                     value={state.distance}
                     onChange={(e) => setState({ ...state, distance: e.target.value })}
+                    data-testid="distance-input"
                   />
                 </Form.Group>
               </div>
@@ -193,6 +196,7 @@ const TrackExercise = ({ currentUser }) => {
                 required
                 value={state.description}
                 onChange={(e) => setState({ ...state, description: e.target.value })}
+                data-testid="description-input"
               />
             </Form.Group>
           )}
@@ -200,7 +204,7 @@ const TrackExercise = ({ currentUser }) => {
         </div>
         {state.distance > 0 && state.duration > 0 && (
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-            <Card withBorder radius="md" style={{ marginRight: '10px' }}>
+            <Card withBorder radius="md" style={{ marginRight: '10px' }} data-testid="pace-card">
               <Group justify="space-between">
                 <Text className='title'>Pace</Text>
               </Group>
@@ -208,7 +212,7 @@ const TrackExercise = ({ currentUser }) => {
                 <Text size="xl">{pace.toFixed(2)} <span style={{ fontSize: '0.8em' }}>min/km</span></Text>
               </div>
             </Card>
-            <Card withBorder radius="md">
+            <Card withBorder radius="md" data-testid="speed-card">
               <Group justify="space-between">
                 <Text className='title'>Speed</Text>
               </Group>
@@ -220,12 +224,12 @@ const TrackExercise = ({ currentUser }) => {
 
         )}
 
-        <Button variant="success" type="submit">
+        <Button variant="success" type="submit" data-testid="submit-button">
           Save activity
         </Button>
       </Form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
+      {error && <p style={{ color: 'red' }} data-testid="error-message">{error}</p>}
+      {message && <p style={{ color: 'green' }} data-testid="success-message">{message}</p>}
     </div>
   );
 };
