@@ -7,7 +7,7 @@ import config from '../config';
 import { Table, Text, ScrollArea, rem, ActionIcon, Flex, Tooltip } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
 import moment from 'moment';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts'; // Add recharts components
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
 
 const UserProfile = ({ currentUser }) => {
   const [userProfiles, setUserProfiles] = useState([]);
@@ -79,7 +79,8 @@ const UserProfile = ({ currentUser }) => {
   };
 
   const handleCloseModal = () => {
-      setShowModal(false);
+    setError('');
+    setShowModal(false);
   };
 
   const handleOpenModal = (profileId) => {
@@ -214,11 +215,11 @@ const UserProfile = ({ currentUser }) => {
             </Table.Tbody>
           </Table>
         </div>
-        <div style={{ flex: '1', marginLeft: '20px' }}> {/* Chart container */}
+        <div style={{ flex: '1', marginLeft: '20px' }}>
           <LineChart width={400} height={300} data={weightChartData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" label={{ value: 'Date', position: 'insideBottom', dy: 10 }} /> {/* Add label for x-axis */}
-          <YAxis label={{ value: 'Weight', angle: -90, position: 'insideLeft' }} /> {/* Add label for y-axis */}
+          <XAxis dataKey="date" label={{ value: 'Date', position: 'insideBottom', dy: 10 }} />
+          <YAxis label={{ value: 'Weight', angle: -90, position: 'insideLeft' }} />
           <RechartsTooltip />
           <Legend />
           <Line type="monotone" dataKey="weight" stroke="#8884d8" />
