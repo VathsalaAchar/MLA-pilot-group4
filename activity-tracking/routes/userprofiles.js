@@ -46,7 +46,7 @@ router.post('/add', async (req, res) => {
         });
 
         await newUserProfile.save();
-        res.json({ message: 'Userprofile created!' });
+        res.json({ message: 'Userprofile created!', data: newUserProfile });
     } catch (error) {
         res.status(400).json({ error: 'Error:' + error.message });
     }
