@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import './journal.css';
 import axios from 'axios';
-import config from '../config';
+import config from '../../config';
 
 const iconMap = {
   Running: { icon: IconRun, color: '#882255' },

@@ -6,7 +6,7 @@ import { Table, Text, rem, ActionIcon, Flex, Tooltip } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconEdit, IconTrash } from '@tabler/icons-react';
 import moment from 'moment';
 import './manage.css';
-import config from '../config';
+import config from '../../config';
 
 const Manage = ({ currentUser }) => {
   const [exercises, setExercises] = useState([]);

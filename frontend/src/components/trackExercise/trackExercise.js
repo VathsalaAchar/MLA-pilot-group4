@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@mantine/core/styles.css';
 import classes from './trackExercise.css';
-import { trackExercise, updateExercise } from '../api';
+import { trackExercise, updateExercise } from '../../api';
 
 const TrackExercise = ({ currentUser }) => {
   const location = useLocation();

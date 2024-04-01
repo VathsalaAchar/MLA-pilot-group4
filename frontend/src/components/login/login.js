@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import config from '../config';
-import logo from '../img/CFG_logo.png';
-import '../App.css'
+import config from '../../config';
+import logo from '../../img/CFG_logo.png';
+import '../../App.css'
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');

@@ -3,7 +3,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { IconUser,IconHeartPlus, IconChartInfographic, IconNotebook, IconFilePencil, IconLogout } from '@tabler/icons-react';
 import { Group } from '@mantine/core';
-import logo from '../img/CFG_logo.png';
+import logo from '../../img/CFG_logo.png';
 import { MantineProvider } from '@mantine/core'; 
 
 const NavbarComponent = ({ onLogout }) => {

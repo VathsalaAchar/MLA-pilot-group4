@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core'; 
 import TrackExercise from './trackExercise.js';
 
-import { trackExercise } from '../api';
+import { trackExercise } from '../../api.js';
 jest.mock('../api', () => ({
   trackExercise: jest.fn(),
 }));
