@@ -23,13 +23,13 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Run Jest tests
         run: |
           cd frontend
           npm test
-          
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
