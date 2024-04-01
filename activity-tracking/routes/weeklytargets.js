@@ -3,9 +3,9 @@ const router = express.Router();
 const WeeklyTarget = require('../models/weeklytarget.model');
 
 // GET: Retrieve all weeklytargets
-router.get('/', async (req, res) => {
+router.get('/:username', async (req, res) => {
     try {
-        const weeklytargets = await WeeklyTarget.find();
+        const weeklytargets = await WeeklyTarget.find({ "username": req.params.username });
         res.json(weeklytargets);
     } catch (error) {
         res.status(400).json({ error: 'Error: ' + error.message });
