@@ -13,7 +13,7 @@ const mongoUri = `${baseUri}/${database}?authsource=admin`;
 
 
 // Middleware setup
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.json());
 
 // MongoDB connection
