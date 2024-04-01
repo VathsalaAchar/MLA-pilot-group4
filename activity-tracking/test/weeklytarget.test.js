@@ -13,6 +13,7 @@ const weeklyTargetToAdd = {
     cyclingTarget: 20,
     swimmingTarget: 0,
     gymTarget: 100,
+    walkingTarget: 100,
     otherTarget: 0,
     weekStartDate: weekStartDate
 }
@@ -23,6 +24,7 @@ const weeklyTargetToUpdate = {
     cyclingTarget: 45,
     swimmingTarget: 10,
     gymTarget: 60,
+    walkingTarget: 60,
     otherTarget: 0,
     weekStartDate: weekStartDate
 }
@@ -34,15 +36,15 @@ afterAll(async () => {
     await mongoose.connection.close()
 });
 
-describe("GET /targets/", () => {
-    it("should return all weekly targets", async () => {
+describe("GET /targets/:username", () => {
+    it("should return the weekly target for a specific user", async () => {
         return request(app)
-            .get("/targets/")
+            .get(`/targets/${username}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
                 expect(res.statusCode).toBe(200);
-            })
+            });
     });
 });
 
@@ -68,6 +70,7 @@ describe("PATCH /targets/update", () => {
             .expect(200)
             .then(({ body }) => {
                 expect(body._id).toBe(weeklyTargetId)
+                weeklyTargetId = body._id
                 expect(body.username).toBe(username)
                 expect(body.runningTarget).toBe(weeklyTargetToUpdate.runningTarget)
             })
