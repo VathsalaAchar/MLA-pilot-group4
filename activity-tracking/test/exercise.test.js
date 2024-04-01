@@ -3,7 +3,7 @@ const request = require('supertest');
 const { app, server } = require('../server');
 require("dotenv").config;
 
-const username = "testuser"
+const username = "test-user"
 const today = new Date()
 let distance = 100
 let duration = 10
@@ -15,7 +15,7 @@ const exerciseToAdd = {
     duration: duration,
     distance: distance,
     speed: distance * 60 / distance,
-    pace: duration/distance,
+    pace: duration / distance,
     date: today
 }
 
@@ -72,6 +72,16 @@ describe("GET /exercises/:id", () => {
     test("should get exercise for an id", async () => {
         return request(app)
             .get(`/exercises/${exerciseId}`)
+            .expect(200)
+            .expect('Content-Type', /json/)
+    });
+});
+
+
+describe("GET /exercises/user/:username", () => {
+    test("should get all exercises for a username", async () => {
+        return request(app)
+            .get(`/exercises/user/${username}`)
             .expect(200)
             .expect('Content-Type', /json/)
     });
