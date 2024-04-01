@@ -41,18 +41,18 @@ async function createExercises() {
 
 async function createWeeklyTargets() {
     await Promise.all([
-        weeklyTargetInstanceCreate('user1', 10, 10, 10, 10, 10, moment().startOf('week').toDate()),
-        weeklyTargetInstanceCreate('user1', 100, 0, 0, 0, 0, moment().subtract(1, 'weeks').startOf('week').toDate()),
-        weeklyTargetInstanceCreate('user1', 0, 0, 0, 50, 45, moment().subtract(2, 'weeks').startOf('week').toDate()),
-        weeklyTargetInstanceCreate('user1', 20, 30, 45, 0, 0, moment().subtract(3, 'weeks').startOf('week').toDate()),
-        weeklyTargetInstanceCreate('testuser', 0, 10, 10, 10, 100, moment().startOf('week').toDate()),
-        weeklyTargetInstanceCreate('testuser', 10, 0, 30, 30, 0, moment().subtract(1, 'weeks').startOf('week').toDate()),
-        weeklyTargetInstanceCreate('testuser', 100, 0, 0, 0, 45, moment().subtract(2, 'weeks').startOf('week').toDate()),
-        weeklyTargetInstanceCreate('testuser', 35, 0, 45, 60, 0, moment().subtract(3, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('user1', 10, 10, 10, 10, 10, 10, moment().startOf('week').toDate()),
+        weeklyTargetInstanceCreate('user1', 100, 0, 0, 0, 0, 0, moment().subtract(1, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('user1', 0, 0, 0, 50, 30, 45, moment().subtract(2, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('user1', 20, 30, 45, 0, 0, 0, moment().subtract(3, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('testuser', 0, 10, 10, 10, 0, 100, moment().startOf('week').toDate()),
+        weeklyTargetInstanceCreate('testuser', 10, 0, 30, 30, 0, 0, moment().subtract(1, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('testuser', 100, 0, 0, 0, 45, 0, moment().subtract(2, 'weeks').startOf('week').toDate()),
+        weeklyTargetInstanceCreate('testuser', 35, 0, 45, 60, 0, 0, moment().subtract(3, 'weeks').startOf('week').toDate()),
     ])
 }
 
-async function weeklyTargetInstanceCreate(username, runningTarget, cyclingTarget, swimmingTarget, gymTarget, otherTarget, weekStartDate) {
+async function weeklyTargetInstanceCreate(username, runningTarget, cyclingTarget, swimmingTarget, gymTarget, walkingTarget, otherTarget, weekStartDate) {
 
     const new_targets = new WeeklyTarget({
         username: username,
@@ -60,6 +60,7 @@ async function weeklyTargetInstanceCreate(username, runningTarget, cyclingTarget
         cyclingTarget: cyclingTarget,
         swimmingTarget: swimmingTarget,
         gymTarget: gymTarget,
+        walkingTarget: walkingTarget,
         otherTarget: otherTarget,
         weekStartDate: weekStartDate,
     })
