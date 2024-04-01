@@ -28,6 +28,7 @@ type_defs = gql("""
         Cycling
         Swimming
         Gym
+        Walking
         Other
     }
     

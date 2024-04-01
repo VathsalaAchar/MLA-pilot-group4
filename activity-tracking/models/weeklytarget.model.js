@@ -9,6 +9,7 @@ const weeklyTargetSchema = new Schema(
         cyclingTarget: { type: Number, default: 0 },
         swimmingTarget: { type: Number, default: 0 },
         gymTarget: { type: Number, default: 0 },
+        walkingTarget: { type: Number, default: 0 },
         otherTarget: { type: Number, default: 0 },
         weekStartDate: {
             type: Date,

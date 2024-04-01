@@ -7,7 +7,7 @@ const exerciseSchema = new Schema(
     exerciseType: {
       type: String,
       required: true,
-      enum: ['Running', 'Cycling', 'Swimming', 'Gym', 'Other']
+      enum: ['Running', 'Cycling', 'Swimming', 'Gym', 'Walking', 'Other']
     },
     description: { type: String, required: false },
     duration: {
