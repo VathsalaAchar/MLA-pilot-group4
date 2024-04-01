@@ -9,6 +9,7 @@ const iconMap = {
   Cycling: '#024059',
   Gym: '#4B0092',
   Swimming: '#0072B2',
+  Walking: '#00412A',
   Other: '#112D6E'
 };
 
@@ -110,8 +111,8 @@ const Statistics = ({ currentUser }) => {
       )}
       <div className="card-container">
         {exercisesData.map((entry, index) => (
-          // Render card for Running, Cycling, and Swimming exercises only for now
-          entry.exerciseType === "Running" || entry.exerciseType === "Cycling" || entry.exerciseType === "Swimming" ? (
+          // Render card for Running, Cycling, Swimming and Walking exercises only for now
+          entry.exerciseType === "Running" || entry.exerciseType === "Cycling" || entry.exerciseType === "Swimming" || entry.exerciseType === "Walking" ? (
             <Card key={index} shadow='md' p="xl" radius="md" className='card'>
               <div className='inner'>
                 <div>

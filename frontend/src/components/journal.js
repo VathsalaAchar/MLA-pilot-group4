@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Card, RingProgress, Text, Center, Modal, TextInput, Tooltip, Badge, Group } from '@mantine/core';
-import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon } from '@tabler/icons-react';
+import { IconRun, IconBike, IconSwimming, IconBarbell, IconWalk, IconHelpOctagon } from '@tabler/icons-react';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import './journal.css';
@@ -12,6 +12,7 @@ const iconMap = {
   Cycling: { icon: IconBike, color: '#024059' },
   Gym: { icon: IconBarbell, color: '#4B0092' },
   Swimming: { icon: IconSwimming, color: '#0072B2' },
+  Walking: { icon: IconWalk, color: '#00412A' },
   Other: { icon: IconHelpOctagon, color: '#112D6E' }
 };
 
@@ -59,6 +60,7 @@ const Journal = ({ currentUser }) => {
           Cycling: 0,
           Gym: 0,
           Swimming: 0,
+          Walking: 0,
           Other: 0
         });
       }
@@ -82,6 +84,7 @@ const Journal = ({ currentUser }) => {
           Cycling: currentWeekTargets.cyclingTarget,
           Gym: currentWeekTargets.gymTarget,
           Swimming: currentWeekTargets.swimmingTarget,
+          Walking: currentWeekTargets.walkingTarget,
           Other: currentWeekTargets.otherTarget
         });
       } else {
@@ -90,6 +93,7 @@ const Journal = ({ currentUser }) => {
           Cycling: 0,
           Gym: 0,
           Swimming: 0,
+          Walking: 0,
           Other: 0
         });
       }
@@ -124,6 +128,7 @@ const Journal = ({ currentUser }) => {
           Cycling: currentWeekTargets.cyclingTarget,
           Gym: currentWeekTargets.gymTarget,
           Swimming: currentWeekTargets.swimmingTarget,
+          Walking: currentWeekTargets.walkingTarget,
           Other: currentWeekTargets.otherTarget
         });
       } else {
@@ -132,6 +137,7 @@ const Journal = ({ currentUser }) => {
           Cycling: exerciseTargets.Cycling || 0,
           Gym: exerciseTargets.Gym || 0,
           Swimming: exerciseTargets.Swimming || 0,
+          Walking: exerciseTargets.Walking || 0,
           Other: exerciseTargets.Other || 0
         });
       }
@@ -175,6 +181,7 @@ const Journal = ({ currentUser }) => {
           cyclingTarget: updatedTargets.Cycling,
           gymTarget: updatedTargets.Gym,
           swimmingTarget: updatedTargets.Swimming,
+          walkingTarget: updatedTargets.Walking,
           otherTarget: updatedTargets.Other,
           weekStartDate: startDate.toDate()
         });
@@ -191,6 +198,7 @@ const Journal = ({ currentUser }) => {
           cyclingTarget: updatedTargets.Cycling,
           gymTarget: updatedTargets.Gym,
           swimmingTarget: updatedTargets.Swimming,
+          walkingTarget: updatedTargets.Walking,
           otherTarget: updatedTargets.Other,
           weekStartDate: startDate.toDate()
         });
@@ -210,7 +218,7 @@ const Journal = ({ currentUser }) => {
   };
   
   const sortedExercises = exercises.sort((a, b) => {
-    const order = ['Running', 'Swimming', 'Cycling', 'Gym', 'Other'];
+    const order = ['Running', 'Swimming', 'Cycling', 'Walking', 'Gym', 'Other'];
     return order.indexOf(a.exerciseType) - order.indexOf(b.exerciseType);
   });
 
@@ -222,6 +230,8 @@ const Journal = ({ currentUser }) => {
         return { from: '#0072B2', to: 'rgba(46, 46, 46, 0.68)', deg: 158 };
       case 'Cycling':
         return { from: '#024059', to: 'rgba(46, 46, 46, 0.68)', deg: 158 };
+      case 'Walking':
+          return { from: '#00A86B', to: 'rgba(0, 168, 107, 0.68)', deg: 158 };
       default:
         return undefined;
     }
@@ -350,7 +360,7 @@ const Journal = ({ currentUser }) => {
               )}
             </Text>
             {/* Button to show detailed stats */}
-            {['Running', 'Swimming', 'Cycling'].includes(exercise.exerciseType) && (
+            {['Running', 'Swimming', 'Cycling', 'Walking'].includes(exercise.exerciseType) && (
               <Badge
                 size="sm"
                 variant="light"
