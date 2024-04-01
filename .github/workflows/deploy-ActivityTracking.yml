@@ -33,17 +33,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # # Setting up CI pipeline to run npm tests
-      # - name: Set up node environment for test
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '14'
+      # Setting up CI pipeline to run npm tests
+      - name: Set up node environment for test
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
 
-      # - name: Run npm tests
-      #   run: |
-      #     cd activity-tracking
-      #     npm ci
-      #     npm run test
+      - name: Run npm tests
+        run: |
+          cd activity-tracking
+          npm ci
+          npm run test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
