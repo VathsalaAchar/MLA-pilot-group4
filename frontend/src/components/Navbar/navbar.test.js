@@ -19,7 +19,7 @@ describe('NavbarComponent', () => {
     expect(getByTestId('nav-link-1')).toBeInTheDocument();
     expect(getByTestId('nav-link-2')).toBeInTheDocument();
     expect(getByTestId('nav-link-3')).toBeInTheDocument();
-    expect(getByTestId('logout-link')).toBeInTheDocument();
+    expect(getByTestId('logout-button')).toBeInTheDocument();
   });
 
   test('calls onLogout when logout link is clicked', () => {
@@ -30,7 +30,7 @@ describe('NavbarComponent', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(getByTestId('logout-link'));
+    fireEvent.click(getByTestId('logout-button'));
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });

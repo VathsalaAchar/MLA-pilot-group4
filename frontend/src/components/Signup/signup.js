@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import config from '../../config';
 import logo from '../../img/CFG_logo.png';
-import '../../App.css'
+import '../../App.css';
 
 const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -15,7 +15,6 @@ const Signup = ({ onSignup }) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  //function to check if the password meets the criteria or not
   const isPasswordValid = (password) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     return regex.test(password);
@@ -27,27 +26,27 @@ const Signup = ({ onSignup }) => {
 
     const { username, password } = formData;
 
-    //If password doesn't meet the criteria it shows the error message
     if (!isPasswordValid(password)) {
-      setError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+      setError(
+        'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+      );
       return;
     }
 
     try {
-        const response = await axios.post(`${config.apiUrl}/auth/signup`, formData);
+      const response = await axios.post(`${config.apiUrl}/auth/signup`, formData);
 
-        if (response.data === 'User registered successfully!') {
-            console.log('User registered successfully');
-            onSignup(formData.username); 
-        } else {
-            setError(response.data);
-        }
+      if (response.data === 'User registered successfully!') {
+        console.log('User registered successfully');
+        onSignup(formData.username);
+      } else {
+        setError(response.data);
+      }
     } catch (error) {
-        console.error('Error during registration', error);
-        setError(error.response?.data || 'An error occurred during registration. Please try again.');
+      console.error('Error during registration:', error);
+      setError(error.response?.data || 'An error occurred during registration. Please try again.');
     }
   };
-
 
   return (
     <div className="login-container" data-testid="signup-container">

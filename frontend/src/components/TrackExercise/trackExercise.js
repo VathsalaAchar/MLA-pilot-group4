@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
-import { Card, Text, SimpleGrid, UnstyledButton, Group, useMantineTheme } from '@mantine/core';
+import { Card, Text, SimpleGrid, UnstyledButton, Group } from '@mantine/core';
 import { IconRun, IconBike, IconSwimming, IconBarbell, IconHelpOctagon, IconWalk } from '@tabler/icons-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -122,6 +122,7 @@ const TrackExercise = ({ currentUser }) => {
             className="exercise-item"
             onClick={() => handleExerciseTypeChange(type)}
             style={{ color: state.exerciseType === type ? '#882255' : 'black' }}
+            aria-label={`Select ${type} exercise`}
           >
             {icon}
             <Text size="m" mt={7}>{type}</Text>
@@ -170,6 +171,7 @@ const TrackExercise = ({ currentUser }) => {
                   value={state.duration}
                   onChange={(e) => setState({ ...state, duration: e.target.value })}
                   data-testid="duration-input"
+                  aria-label="Duration in minutes"
                 />
               </Form.Group>
             </div>
@@ -183,6 +185,7 @@ const TrackExercise = ({ currentUser }) => {
                     value={state.distance}
                     onChange={(e) => setState({ ...state, distance: e.target.value })}
                     data-testid="distance-input"
+                    aria-label="Distance in kilometers"
                   />
                 </Form.Group>
               </div>
@@ -198,6 +201,7 @@ const TrackExercise = ({ currentUser }) => {
                 value={state.description}
                 onChange={(e) => setState({ ...state, description: e.target.value })}
                 data-testid="description-input"
+                aria-label="Description"
               />
             </Form.Group>
           )}
@@ -225,7 +229,7 @@ const TrackExercise = ({ currentUser }) => {
 
         )}
 
-        <Button variant="success" type="submit" data-testid="submit-button">
+        <Button variant="success" type="submit" data-testid="submit-button" aria-label="Save activity">
           Save activity
         </Button>
       </Form>

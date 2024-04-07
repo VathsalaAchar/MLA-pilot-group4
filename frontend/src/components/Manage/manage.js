@@ -1,4 +1,3 @@
-// manage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
@@ -30,11 +29,11 @@ const Manage = ({ currentUser }) => {
       if (response.data) {
         setExercises(response.data);
       } else {
-        console.error('There was an error fetching the data!', response.data);
+        console.error('Failed to fetch data:', response.data);
         setExercises([]);
       }
     } catch (error) {
-      console.error('Failed to fetch exercises', error);
+      console.error('Failed to fetch exercises:', error);
       setExercises([]);
     }
   };
@@ -44,7 +43,7 @@ const Manage = ({ currentUser }) => {
       await axios.delete(`${config.apiUrl}/exercises/${id}`);
       getExercises();
     } catch (error) {
-      console.error('Failed to delete exercise', error);
+      console.error('Failed to delete exercise:', error);
     }
   };
 
@@ -55,7 +54,7 @@ const Manage = ({ currentUser }) => {
         state: response.data
       });
     } catch (error) {
-      console.error('Failed to fetch exercise for editing', error);
+      console.error('Failed to fetch exercise for editing:', error);
     }
   };
 
@@ -72,9 +71,7 @@ const Manage = ({ currentUser }) => {
 
     sortedExercisesCopy.sort((a, b) => {
       if (sortByField === 'date') {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA - dateB;
+        return moment(a.date).valueOf() - moment(b.date).valueOf();
       }
 
       if (sortByField === 'duration') {
@@ -82,17 +79,10 @@ const Manage = ({ currentUser }) => {
       }
 
       if (sortByField === 'distance' || sortByField === 'pace' || sortByField === 'speed') {
-        if (sortByField === 'pace') {
-          const paceA = moment.duration(a[sortByField]).asSeconds();
-          const paceB = moment.duration(b[sortByField]).asSeconds();
-          return paceA - paceB;
-        }
         return a[sortByField] - b[sortByField];
       }
 
-      const fieldA = a[sortByField].toLowerCase();
-      const fieldB = b[sortByField].toLowerCase();
-      return fieldA.localeCompare(fieldB);
+      return a[sortByField].localeCompare(b[sortByField]);
     });
 
     if (reverseSortDirection) {
@@ -113,13 +103,13 @@ const Manage = ({ currentUser }) => {
       <Table.Td style={{ textAlign: 'center' }}>
         <Flex gap="md" style={{ justifyContent: 'center' }}>
           <Tooltip label="Edit">
-            <ActionIcon size={25} color='#0072B2' onClick={() => handleEditExercise(exercise._id)}>
-              <IconEdit style={{ width: rem(20), height: rem(20) }} data-testid={`edit-exercise-${index}`} />
+            <ActionIcon size={25} color='#0072B2' onClick={() => handleEditExercise(exercise._id)} aria-label={`Edit exercise ${index}`}>
+              <IconEdit style={{ width: rem(20), height: rem(20) }} />
             </ActionIcon>
           </Tooltip>
           <Tooltip label="Delete">
-            <ActionIcon size={25} color="#882255" onClick={() => handleDeleteExercise(exercise._id)}>
-              <IconTrash style={{ width: rem(20), height: rem(20) }} data-testid={`delete-exercise-${index}`} />
+            <ActionIcon size={25} color="#882255" onClick={() => handleDeleteExercise(exercise._id)} aria-label={`Delete exercise ${index}`}>
+              <IconTrash style={{ width: rem(20), height: rem(20) }} />
             </ActionIcon>
           </Tooltip>
         </Flex>
@@ -132,7 +122,7 @@ const Manage = ({ currentUser }) => {
       <h4>Manage Exercise</h4>
       <hr/>
       <Table horizontalSpacing="md" verticalSpacing="md" miw={700} layout="fixed">
-        <Table.Tbody>
+        <Table.Thead>
           <Table.Tr>
             <Th sorted={sortBy === 'date'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('date')} data-testid="sort-date">Date</Th>
             <Th sorted={sortBy === 'exerciseType'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('exerciseType')} data-testid="sort-exercise-type">Exercise Type</Th>
@@ -142,6 +132,8 @@ const Manage = ({ currentUser }) => {
             <Th sorted={sortBy === 'speed'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('speed')} data-testid="sort-speed">Speed</Th>
             <Th>Actions</Th>
           </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {exerciseRows.length > 0 ? (
             exerciseRows
           ) : (

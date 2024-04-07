@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import config from '../../config';
 import logo from '../../img/CFG_logo.png';
-import '../../App.css'
+import '../../App.css';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -23,10 +23,10 @@ const Login = ({ onLogin }) => {
       if (response.status === 200) {
         onLogin(username);
       } else {
-        setError('Invalid credentials');
+        setError('Invalid username or password. Please try again.');
       }
     } catch (err) {
-      setError('Failed to login');
+      setError('Failed to login. Please try again later.');
     }
   };
 
@@ -72,7 +72,7 @@ const Login = ({ onLogin }) => {
       </Form>
 
       <p className="mt-3">
-        Don't have an account? <Link to="/signup" data-testid="signup-link">Sign up</Link>
+        Don't have an account? <Link to="/signup" data-testid="signup-link" aria-label="Sign up">Sign up</Link>
       </p>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, Form, Button } from 'react-bootstrap'; 
+import { Modal, Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import config from '../../config';
@@ -8,6 +8,7 @@ import { Table, Text, ScrollArea, rem, ActionIcon, Flex, Tooltip } from '@mantin
 import { IconChevronDown, IconChevronUp, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
 import moment from 'moment';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import './userProfile.css'
 
 const UserProfile = ({ currentUser }) => {
   const [userProfiles, setUserProfiles] = useState([]);
@@ -46,10 +47,10 @@ const UserProfile = ({ currentUser }) => {
     );
     sortUserProfiles(sortByField);
   };
-  
+
   const sortUserProfiles = (sortByField) => {
     const sortedUserProfiles = [...userProfiles];
-  
+
     sortedUserProfiles.sort((a, b) => {
       let comparison = 0;
       if (sortByField === 'dateMeasured') {
@@ -61,11 +62,11 @@ const UserProfile = ({ currentUser }) => {
       }
       return comparison;
     });
-  
+
     if (reverseSortDirection) {
       sortedUserProfiles.reverse();
     }
-  
+
     setUserProfiles(sortedUserProfiles);
   };
 
@@ -111,17 +112,17 @@ const UserProfile = ({ currentUser }) => {
         setError('Please enter both height and weight.');
         return;
       }
-  
+
       if (formData.height < 100 || formData.height > 300) {
         setError('Height must be between 100 and 300 cm.');
         return;
       }
-  
+
       if (formData.weight <= 0) {
         setError('Weight must be greater than 0.');
         return;
       }
-  
+
       if (formData._id) {
         await updateUserProfile(formData._id, formData);
       } else {
@@ -145,7 +146,7 @@ const UserProfile = ({ currentUser }) => {
   const addUserProfile = async (newProfileData) => {
     try {
       await axios.post('/userprofiles/add', newProfileData);
-      fetchUserProfiles(); 
+      fetchUserProfiles();
     } catch (error) {
       console.error('Error adding user profile:', error);
     }
@@ -169,12 +170,12 @@ const UserProfile = ({ currentUser }) => {
           <Flex gap="md" style={{ justifyContent: 'center' }}>
             <Tooltip label="Edit">
               <ActionIcon size={25} color='#0072B2' onClick={() => handleOpenModal(profile._id)}>
-                <IconEdit style={{ width: rem(20), height: rem(20) }}/>
+                <IconEdit style={{ width: rem(20), height: rem(20) }} alt="Edit" />
               </ActionIcon>
             </Tooltip>
             <Tooltip label="Delete">
               <ActionIcon size={25} color="#882255" onClick={() => deleteUserProfile(profile._id)}>
-                <IconTrash style={{ width: rem(20), height: rem(20) }} />
+                <IconTrash style={{ width: rem(20), height: rem(20) }} alt="Delete" />
               </ActionIcon>
             </Tooltip>
           </Flex>
@@ -184,47 +185,51 @@ const UserProfile = ({ currentUser }) => {
   });
 
   return (
-    <ScrollArea className='userProfileContainer'>
+    <div className='userProfileContainer'>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-      <h4 style={{ margin: 0 }}>{currentUser} Personal Metrics</h4>
-      <Button variant="primary" onClick={() => handleOpenModal()}> 
-        <IconPlus style={{ marginRight: '0.5rem' }} /> Add Metrics
-      </Button>
-    </div>
-      <hr/>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: '1' }}>
-          <Table horizontalSpacing="md" verticalSpacing="md" miw={700} layout="fixed">
-            <Table.Tbody>
-              <Table.Tr>
-                <Th sorted={sortBy === 'height'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('height')}>Height (in cm)</Th>
-                <Th sorted={sortBy === 'weight'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('weight')}>Weight (in Kilos)</Th>
-                <Th sorted={sortBy === 'bmi'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('bmi')}>BMI</Th>
-                <Th sorted={sortBy === 'dateMeasured'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('dateMeasured')}>Date Measured</Th>
-                <Th>Actions</Th>
-              </Table.Tr>
-              {userProfileRows.length > 0 ? (
-                userProfileRows
-              ) : (
-                <Table.Tr>
-                  <Table.Td colSpan={5}>
-                    <Text fw={500} ta="center">No personal Metrics found for the user.</Text>
-                  </Table.Td>
-                </Table.Tr>
-              )}
-            </Table.Tbody>
-          </Table>
-        </div>
-        <div style={{ flex: '1', marginLeft: '20px' }}>
-          <LineChart width={400} height={300} data={weightChartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" label={{ value: 'Date', position: 'insideBottom', dy: 10 }} />
-          <YAxis label={{ value: 'Weight', angle: -90, position: 'insideLeft' }} />
-          <RechartsTooltip />
-          <Legend />
-          <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-          </LineChart>
+        <h4 style={{ margin: 0 }}>{currentUser} Personal Metrics</h4>
+        <Button variant="primary" onClick={() => handleOpenModal()}>
+          <IconPlus style={{ marginRight: '0.5rem' }} /> Add Metrics
+        </Button>
       </div>
+      <hr />
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: '1', marginRight: '20px' }}>
+          <LineChart width={400} height={300} data={weightChartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" label={{ value: 'Date', position: 'insideBottom', dy: 10 }} />
+            <YAxis label={{ value: 'Weight', angle: -90, position: 'insideLeft' }} />
+            <RechartsTooltip />
+            <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+          </LineChart>
+          <text x="50%" y="20" textAnchor="middle" dominantBaseline="middle" className="chart-heading">
+              Weight Progression
+            </text>
+        </div>
+        <div style={{ flex: '1' }}>
+          <ScrollArea>
+            <Table horizontalSpacing="md" verticalSpacing="md" miw={700} layout="fixed">
+              <Table.Tbody>
+                <Table.Tr>
+                  <Th sorted={sortBy === 'height'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('height')}>Height (in cm)</Th>
+                  <Th sorted={sortBy === 'weight'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('weight')}>Weight (in Kilos)</Th>
+                  <Th sorted={sortBy === 'bmi'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('bmi')}>BMI</Th>
+                  <Th sorted={sortBy === 'dateMeasured'} reverseSortDirection={reverseSortDirection} onSort={() => handleSort('dateMeasured')}>Date Measured</Th>
+                  <Th>Actions</Th>
+                </Table.Tr>
+                {userProfileRows.length > 0 ? (
+                  userProfileRows
+                ) : (
+                  <Table.Tr>
+                    <Table.Td colSpan={5}>
+                      <Text fw={500} ta="center">No personal Metrics found for the user.</Text>
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            </Table>
+          </ScrollArea>
+        </div>
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -234,26 +239,26 @@ const UserProfile = ({ currentUser }) => {
           <Form>
             <Form.Group controlId="height">
               <Form.Label>Height (in cm)</Form.Label>
-              <Form.Control type="number" value={formData.height} 
-              onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-              min={100}
-              max={300}
-              required />
+              <Form.Control type="number" value={formData.height}
+                onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+                min={100}
+                max={300}
+                required />
             </Form.Group>
             <Form.Group controlId="weight">
               <Form.Label>Weight (in kg)</Form.Label>
-              <Form.Control type="number" value={formData.weight} 
-              onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-              min={0}
-              required />
+              <Form.Control type="number" value={formData.weight}
+                onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                min={0}
+                required />
             </Form.Group>
             <Form.Group controlId="dateMeasured">
               <Form.Label>Date Measured</Form.Label>
               <br />
-              <DatePicker selected={formData.dateMeasured} 
-              onChange={(date) => setFormData({ ...formData, dateMeasured: date })} dateFormat="yyyy/MM/dd"
-              maxDate={new Date()}
-              required />
+              <DatePicker selected={formData.dateMeasured}
+                onChange={(date) => setFormData({ ...formData, dateMeasured: date })} dateFormat="yyyy/MM/dd"
+                maxDate={new Date()}
+                required />
             </Form.Group>
             <br />
             <Button variant="primary" onClick={handleAddOrUpdate}>
@@ -264,7 +269,7 @@ const UserProfile = ({ currentUser }) => {
           {message && <p style={{ color: 'green' }}>{message}</p>}
         </Modal.Body>
       </Modal>
-    </ScrollArea>
+    </div>
   );
 };
 
@@ -275,10 +280,10 @@ const Th = ({ children, sorted, reverseSortDirection, onSort }) => {
     <Table.Th onClick={onSort} className="th" style={{ fontWeight: 'bold', fontSize: '1.1rem', textAlign: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div>{children}</div>
-        {Icon && <Icon className="icon" style={{ width: rem(16), height: rem(16), marginLeft: '0.25rem' }} />}
+        {Icon && <Icon className="icon" style={{ width: rem(16), height: rem(16), marginLeft: '0.25rem' }} alt={sorted ? (reverseSortDirection ? 'Sorted descending' : 'Sorted ascending') : 'Not sorted'} />}
       </div>
     </Table.Th>
   );
 };
-  
+
 export default UserProfile;
