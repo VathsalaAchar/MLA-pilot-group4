@@ -74,7 +74,7 @@ const Journal = ({ currentUser }) => {
 
   const fetchWeeklyTargets = async () => {
     try {
-      const response = await axios.get(`${config.apiUrl}/targets`);
+      const response = await axios.get(`${config.apiUrl}/targets/${currentUser}`);
       const data = response.data;
       const currentWeekTargets = data.find(target => moment(target.weekStartDate).isSame(startDate, 'week'));
       if (currentWeekTargets) {
@@ -118,7 +118,7 @@ const Journal = ({ currentUser }) => {
 
   const handleEditTargets = async () => {
     try {
-      const response = await axios.get(`${config.apiUrl}/targets`);
+      const response = await axios.get(`${config.apiUrl}/targets/${currentUser}`);
       const data = response.data;
       const currentWeekTargets = data.find(target => moment(target.weekStartDate).isSame(startDate, 'week'));
       if (currentWeekTargets) {
