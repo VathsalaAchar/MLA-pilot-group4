@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './statistics.css';
-import { PieChart, Pie, ResponsiveContainer, Sector, Cell, Text } from 'recharts'; // Import Text component
-import config from '../config';
 import { Text as MText, Card, Group } from '@mantine/core';
+import { PieChart, Pie, ResponsiveContainer, Sector, Cell, Text } from 'recharts'; 
+import axios from 'axios';
+import config from '../../config';
+import './statistics.css';
 
 const iconMap = {
   Running: '#882255',

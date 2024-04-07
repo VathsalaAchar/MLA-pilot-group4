@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Modal, Form, Button } from 'react-bootstrap'; 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import config from '../config';
+import config from '../../config';
 import { Table, Text, ScrollArea, rem, ActionIcon, Flex, Tooltip } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconEdit, IconTrash, IconPlus } from '@tabler/icons-react';
 import moment from 'moment';

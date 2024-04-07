@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import config from '../config';
-import logo from '../img/CFG_logo.png';
-import '../App.css'
+import config from '../../config';
+import logo from '../../img/CFG_logo.png';
+import '../../App.css'
 
 const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -50,14 +50,14 @@ const Signup = ({ onSignup }) => {
 
 
   return (
-    <div className="login-container">
+    <div className="login-container" data-testid="signup-container">
       <div className="appTitleLogin">
         <header>
-          <img src={logo} alt="CFG Fitness App Logo" id="appLogo" />
-          <h1>MLA Fitness App</h1>
+          <img src={logo} alt="CFG Fitness App Logo" id="appLogo" data-testid="app-logo" />
+          <h1 data-testid="app-title">MLA Fitness App</h1>
         </header>
       </div>
-      {error && <Alert variant="danger">{error}</Alert>}
+      {error && <Alert variant="danger" data-testid="error-alert">{error}</Alert>}
 
       <Form onSubmit={handleSignup}>
         <Form.Group controlId="formBasicEmail">
@@ -69,6 +69,7 @@ const Signup = ({ onSignup }) => {
             value={formData.username}
             onChange={handleInputChange}
             required
+            data-testid="username-input"
           />
         </Form.Group>
 
@@ -81,16 +82,17 @@ const Signup = ({ onSignup }) => {
             value={formData.password}
             onChange={handleInputChange}
             required
+            data-testid="password-input"
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" style={{ marginTop: '20px' }}>
+        <Button variant="primary" type="submit" style={{ marginTop: '20px' }} data-testid="signup-button">
           Signup
         </Button>
       </Form>
       <p className="mt-3">
-    Already have an account? <Link to="/login">Login</Link>
-</p>
+        Already have an account? <Link to="/login" data-testid="login-link">Login</Link>
+      </p>
     </div>
   );
 };

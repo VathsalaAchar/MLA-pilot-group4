@@ -9,9 +9,10 @@ The Activity Tracking functionality uses the MERN stack (MongoDB, Express.js, Re
 ### Current Features
 
 - User registration for personalized tracking
-- Log various types of exercises with descriptions, duration, and date
-- See weekly and overall statistics
-- Interactive UI with Material-UI components
+- Log various types of exercises with descriptions, duration, distance, date and get real time pace and speed
+- See overall statistics like with new chart
+- weekly statistics with weekly target
+- User profile with information like height, weight and BMI
 - Real-time data persistence with MongoDB
 
 ### Prerequisites
