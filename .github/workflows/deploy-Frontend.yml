@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - main
+      - frontend-unit-test-with-extras
     paths:
       - "frontend/**"
 
@@ -18,6 +19,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Set up node environment for test
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      
+      - name: Run Jest tests
+        run: |
+          cd frontend
+          npm ci
+          npm run test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

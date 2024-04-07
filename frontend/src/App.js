@@ -5,16 +5,17 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavbarComponent from './components/navbar';
-import TrackExercise from './components/trackExercise';
-import Statistics from './components/statistics';
-import Footer from './components/footer';
-import Login from './components/login';
-import Signup from './components/signup';
-import Journal from './components/journal';
-import Manage from './components/manage';
-import logo from './img/CFG_logo.png'; // Update the path to your logo file
-import UserProfile from './components/userProfile';
+import NavbarComponent from './components/Navbar/navbar';
+import TrackExercise from './components/TrackExercise/trackExercise';
+import Statistics from './components/Statistics/statistics';
+import Footer from './components/Footer/footer';
+import Login from './components/Login/login';
+import Signup from './components/Signup/signup';
+import Journal from './components/Journal/journal';
+import Manage from './components/Manage/manage';
+import UserProfile from './components/UserProfile/userProfile';
+import logo from './img/CFG_logo.png'; 
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import './journal.css';
 import axios from 'axios';
-import config from '../config';
+import config from '../../config';
 
 const iconMap = {
   Running: { icon: IconRun, color: '#882255' },
@@ -15,7 +15,6 @@ const iconMap = {
   Walking: { icon: IconWalk, color: '#00412A' },
   Other: { icon: IconHelpOctagon, color: '#112D6E' }
 };
-
 
 const Journal = ({ currentUser }) => {
   const [startDate, setStartDate] = useState(moment().startOf('week'));
@@ -147,10 +146,10 @@ const Journal = ({ currentUser }) => {
     }
   };
 
-
   const handleCloseModal = () => {
     setShowEditModal(false);
   };
+  
   const handleShowDetailedStats = (exerciseType) => {
     setShowDetailedStats(true);
     setSelectedExercise(exerciseType);
@@ -241,7 +240,7 @@ const Journal = ({ currentUser }) => {
     if (showDetailedStats && selectedExercise === exercise.exerciseType && detailedStatsExercise) {
       return (
         <div>
-          <Card padding="xl" radius="md" className='card'>
+          <Card padding="xl" radius="md" className='card' data-testid={`detailed-stats-${exercise.exerciseType}`}>
             <Grid justify="space-between" align="flex-start">
               <Grid.Col span={6}>
                 <div>
@@ -299,7 +298,6 @@ const Journal = ({ currentUser }) => {
                     Average Pace
                   </Text>
                 </div>
-
               </Grid.Col>
               <Grid.Col span={6}>
                 <div>
@@ -319,16 +317,18 @@ const Journal = ({ currentUser }) => {
                     Average Speed
                   </Text>
                 </div>
-
               </Grid.Col>
             </Grid>
           </Card>
           {/* Button to close detailed stats */}
-          <Badge size="sm"
+          <Badge
+            size="sm"
             variant="light"
             color='#D41159'
             style={{ marginTop: 10, cursor: 'pointer' }}
-            onClick={handleCloseDetailedStats}>
+            onClick={handleCloseDetailedStats}
+            aria-label="Close Detailed Stats"
+          >
             Close All Stats
           </Badge>
         </div>
@@ -340,14 +340,14 @@ const Journal = ({ currentUser }) => {
       return (
         <div>
           {/* Progress ring */}
-          <div style={{ position: 'relative', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }} data-testid={`progress-ring-${exercise.exerciseType}`}>
             <RingProgress size={80} roundCaps thickness={8} sections={[{ value: progress, color }]} />
             <Center style={{ position: 'absolute' }}>
-              <Icon size={20} style={{ zIndex: 1 }} />
+              <Icon size={20} style={{ zIndex: 1 }} alt={exercise.exerciseType} />
             </Center>
           </div>
           {/* Basic stats */}
-          <div style={{ textAlign: 'center', marginTop: 10 }}>
+          <div style={{ textAlign: 'center', marginTop: 10 }} data-testid={`basic-stats-${exercise.exerciseType}`}>
             <Text className="exercise-type" c="dimmed" size="xs" tt="uppercase" fw={700}>
               {exercise.exerciseType}
             </Text>
@@ -367,6 +367,7 @@ const Journal = ({ currentUser }) => {
                 color='#006CD1'
                 style={{ marginTop: 10, cursor: 'pointer' }}
                 onClick={() => handleShowDetailedStats(exercise.exerciseType)}
+                aria-label={`Show Detailed Stats for ${exercise.exerciseType}`}
               >
                 Show All Stats
               </Badge>
@@ -378,21 +379,21 @@ const Journal = ({ currentUser }) => {
   };
 
   return (
-    <div className="journal-container">
+    <div className="journal-container" data-testid="journal-container">
       <h4>Weekly Exercise Journal</h4>
       <hr />
       <div className="date-range">
-        <Button className="button-small" onClick={goToPreviousWeek}>&larr; Previous</Button>
+        <Button className="button-small" onClick={goToPreviousWeek} data-testid="previous-week-button" aria-label="Previous Week">&larr; Previous</Button>
         <span>{startDate.format('MMM DD, YYYY')} - {endDate.format('MMM DD, YYYY')}</span>
-        {!isCurrentWeek && <Button className="button-small" onClick={goToNextWeek}>Next &rarr;</Button>}
+        {!isCurrentWeek && <Button className="button-small" onClick={goToNextWeek} data-testid="next-week-button" aria-label="Next Week">Next &rarr;</Button>}
       </div>
 
-      <div className="weekly-target" onClick={handleEditTargets} style={{ cursor: 'pointer' }}>
-        <Text style={{ fontSize: '18px', fontWeight: 'bold' }}>Edit Weekly Target</Text>
+      <div className="weekly-target" onClick={handleEditTargets} style={{ cursor: 'pointer' }} data-testid="weekly-target" aria-label="Edit Weekly Target">
+        <Text style={{ fontSize: '18px', fontWeight: 'bold' }} data-testid="edit-weekly-target-text">Edit Weekly Target</Text>
       </div>
 
       {showEditModal && (
-        <Modal opened={showEditModal} onClose={handleCloseModal} title="Edit Weekly Targets" size="sm">
+        <Modal opened={showEditModal} onClose={handleCloseModal} title="Edit Weekly Targets" size="sm" data-testid="edit-modal">
           <Grid gutter="sm">
             {Object.keys(iconMap).map((exerciseType, index) => (
               <Grid.Col key={index} span={12}>
@@ -410,17 +411,19 @@ const Journal = ({ currentUser }) => {
                   min={0}
                   max={10080}
                   disabled={!isCurrentWeek}
+                  data-testid={`target-input-${exerciseType}`}
+                  aria-label={`Target input for ${exerciseType}`}
                 />
               </Grid.Col>
             ))}
           </Grid>
           {!isCurrentWeek && (
-            <Text style={{ marginTop: '10px', color: 'red' }}>
+            <Text style={{ marginTop: '10px', color: 'red' }} data-testid="previous-week-error">
               Editing for previous weeks is not allowed.
             </Text>
           )}
           <div style={{ textAlign: 'right', marginTop: '16px' }}>
-            <Button onClick={handleSaveTargets} variant="primary" disabled={!isCurrentWeek}>
+            <Button onClick={handleSaveTargets} variant="primary" disabled={!isCurrentWeek} data-testid="save-button" aria-label="Save Targets">
               Save
             </Button>
           </div>
@@ -429,8 +432,8 @@ const Journal = ({ currentUser }) => {
 
       <Grid gutter="md" justify="center">
         {sortedExercises.map((exercise, index) => (
-          <Grid.Col key={index} span={{ xs: 12, sm: 6, md: 4 }}>
-            <Card shadow="xs" className="mantine-card">
+          <Grid.Col key={index} span={{ xs: 12, sm: 6, md: 4 }} data-testid={`exercise-card-${index}`}>
+            <Card shadow="xs" className="mantine-card" data-testid={`card-${exercise.exerciseType}`}>
               {renderCardContent(exercise)}
             </Card>
           </Grid.Col>

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap');
 
+/* Reset styles */
 body, html, div, h1, h2, h3, p, button {
   margin: 0;
   padding: 0;
@@ -9,43 +10,53 @@ body, html, div, h1, h2, h3, p, button {
   vertical-align: baseline;
 }
 
+/* General styles */
 body {
   line-height: 1;
   color: #333; 
 }
 
+/* App container */
 .App {
   display: flex;
   flex-direction: column;
   height: 100vh; /* Utilize full height of the screen */
 }
+
+/* Grid container */
 .grid-container {
   display: flex;
   flex: 1; /* Grow to fill available space */
 }
 
-#header{
- margin: 5px 5px 25px 5px;
+/* Header styles */
+#header {
+  margin: 5px 5px 25px 5px;
 }
-.navComponent{
+
+/* Navigation component */
+.navComponent {
   border-top: 0.1rem solid var(--mantine-color-dark-1);
 }
 
+/* App title */
 #appTitle {
   color: #882255;
-  font-size: 30px;
+  font-size: 25px;
 }
 
+/* App logo */
 #appLogo {
   width: 35px;
   height: auto;
 }
 
+/* Form styles */
 form {
   margin-bottom: 20px;
 }
 
-
+/* Navigation button styles */
 button.navigationButton {
   background-color: #882255; 
   color: white; 
@@ -61,21 +72,23 @@ button.navigationButton:hover {
   background-color: #ff66b2;
 }
 
-/* Style the success message */
+/* Success message styles */
 p.successMessage {
   color: green;
   margin-bottom: 20px;
 }
 
+/* Component container */
 .componentContainer {
   flex: 1; /* Grow to fill remaining space */
   padding: 30px;
   background-color: #f0f0f0; 
   border-radius: 5px; 
   text-align: center;
+  width: calc(100% - 300px); /* Set width to fill remaining space after navbar */
 }
 
-
+/* Primary button styles */
 .btn-primary {
   background-color: #882255 !important;
   border-color: #882255 !important;
@@ -86,6 +99,7 @@ p.successMessage {
   border-color: #882255 !important; 
 }
 
+/* Success button styles */
 .btn-success {
   background-color: #882255 !important;
   border-color: #882255 !important;
@@ -96,15 +110,18 @@ p.successMessage {
   border-color: #882255 !important; 
 }
 
+/* Input field styles */
 input#duration {
   margin: auto; 
 }
 
+/* Form margin styles */
 .form-margin {
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
+/* Footer styles */
 .footer {
   text-align: center;
   padding: 10px;
@@ -112,14 +129,16 @@ input#duration {
   color: lightgrey;
 }
 
+/* Navbar styles */
 .navbar {
-  height: rem(700px);
-  width: rem(300px);
+  height: 700px;
+  width: 245px;
   display: flex;
   flex-direction: column;
-  border-right: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
+/* Nav link styles */
 #navLink {
   display: flex;
   align-items: center;
@@ -129,39 +148,39 @@ input#duration {
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   border-radius: var(--mantine-radius-sm);
   font-weight: 500;
-
-  &:hover,
-  &[data-active] {
-    background-color: #228be61a;
-    color: var(--mantine-color-blue-light-color);
-
-    .linkIcon {
-      color: var(--mantine-color-blue-light-color);
-    }
-  }
 }
 
+#navLink:hover,
+#navLink[data-active] {
+  background-color: #228be61a;
+  color: var(--mantine-color-blue-light-color);
+}
+
+/* Link icon styles */
 .linkIcon {
   color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
   margin-right: var(--mantine-spacing-sm);
-  width: rem(25px);
-  height: rem(25px);
+  width: 25px;
+  height: 25px;
 }
 
+/* Navbar navigation styles */
 .navbar-nav {
   margin: 0 auto !important;
 }
 
+/* Custom nav link styles */
 .custom-nav-link {
   margin-right: 40px;
 }
 
+/* Signup styles */
 .signup {
   margin: 20px;
 }
 
-
-.login-container{
+/* Login container styles */
+.login-container {
   max-width: 600px;
   margin: auto;
   background-color: #f5f5f5;
