@@ -58,6 +58,8 @@ describe("POST /targets/add", () => {
                 weeklyTargetId = body._id
                 expect(body.username).toBe(username)
                 expect(body.runningTarget).toBe(weeklyTargetToAdd.runningTarget)
+                expect(body.walkingTarget).toBe(weeklyTargetToAdd.walkingTarget)
+
             })
     });
 });
@@ -73,6 +75,8 @@ describe("PATCH /targets/update", () => {
                 weeklyTargetId = body._id
                 expect(body.username).toBe(username)
                 expect(body.runningTarget).toBe(weeklyTargetToUpdate.runningTarget)
+                expect(body.walkingTarget).toBe(weeklyTargetToUpdate.walkingTarget)
+
             })
     });
 });
